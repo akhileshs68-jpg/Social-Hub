@@ -1,0 +1,322 @@
+"use client"
+
+import { useSHUBToken } from "@/contexts/shub-token-context"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Skeleton } from "@/components/ui/skeleton"
+import {
+  CheckCircle,
+  Circle,
+  Coins,
+  CalendarDays,
+  Gift,
+  UserPlus,
+  History,
+  PartyPopper,
+} from "lucide-react"
+import { cn } from "@/lib/utils"
+
+const WEEK_DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+const WEEKLY_GOAL = 7
+
+function getWeekDayKeys(): string[] {
+  const now = new Date()
+  const day = now.getDay()
+  const days: string[] = []
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(now)
+    d.setDate(now.getDate() - day + i)
+    days.push(d.toISOString().split("T")[0])
+  }
+  return days
+}
+
+function TxTypeLabel({ type }: { type: string }) {
+  const map: Record<string, string> = {
+    first_login_reward: "Welcome Bonus",
+    daily_reward: "Daily Reward",
+    weekly_reward: "Weekly Bonus",
+    invite_reward: "Invite Reward",
+    earned: "Earned",
+    spent: "Spent",
+  }
+  return <>{map[type] ?? type}</>
+}
+
+export function PremiumView() {
+  const {
+    tokens,
+    firstLoginReward,
+    canClaimDaily,
+    dailyRewardClaimed,
+    weeklyLoginDays,
+    weeklyProgress,
+    inviteCount,
+    transactions,
+    claimDailyReward,
+    isReady,
+  } = useSHUBToken()
+
+  const weekDayKeys = getWeekDayKeys()
+
+  return (
+    <div className="pb-24 pt-2">
+
+      {/* ── Token Balance Hero ─────────────────────────────────────────────── */}
+      <div className="px-4 py-6">
+        <Card className="border-primary/20 bg-primary/5">
+          <CardContent className="pt-6 pb-6">
+            <div className="flex flex-col items-center gap-2 text-center">
+              <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-1">
+                <Coins className="w-8 h-8 text-primary" />
+              </div>
+
+              {!isReady ? (
+                <Skeleton className="h-10 w-32" />
+              ) : (
+                <p className="text-4xl font-bold text-foreground tracking-tight">
+                  {tokens.toFixed(3)}
+                </p>
+              )}
+
+              <p className="text-sm text-muted-foreground font-medium">SHUB Tokens</p>
+              <Badge variant="outline" className="mt-1 text-xs border-primary/30 text-primary">
+                Social Hub Token
+              </Badge>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* ── First Login Welcome Banner (shown once) ───────────────────────── */}
+      {isReady && firstLoginReward && transactions.some((t) => t.type === "first_login_reward") && (
+        <div className="px-4 pb-4">
+          <div className="flex items-center gap-3 p-4 rounded-xl bg-primary/10 border border-primary/20">
+            <PartyPopper className="w-5 h-5 text-primary shrink-0" />
+            <div>
+              <p className="text-sm font-semibold text-foreground">Welcome to Social Hub Pi!</p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                You received a one-time welcome bonus of{" "}
+                <span className="font-bold text-primary">+5 SHUB</span> for joining.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Daily Reward ──────────────────────────────────────────────────── */}
+      <div className="px-4 pb-4">
+        <Card>
+          <CardHeader className="pb-3">
+            <div className="flex items-center gap-2">
+              <Gift className="w-5 h-5 text-primary shrink-0" />
+              <CardTitle className="text-base">Daily Login Reward</CardTitle>
+            </div>
+            <CardDescription>Claim 0.15 SHUB once every 24 hours</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {!isReady ? (
+              <Skeleton className="h-10 w-full" />
+            ) : canClaimDaily ? (
+              <Button className="w-full" onClick={claimDailyReward}>
+                <Gift className="w-4 h-4 mr-2" />
+                Claim 0.15 SHUB
+              </Button>
+            ) : (
+              <div className="flex items-center gap-3 p-3 rounded-lg bg-muted">
+                <CheckCircle className="w-5 h-5 text-primary shrink-0" />
+                <div>
+                  <p className="text-sm font-medium">Reward claimed today</p>
+                  <p className="text-xs text-muted-foreground">
+                    Come back tomorrow for your next reward
+                  </p>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* ── Weekly Streak ─────────────────────────────────────────────────── */}
+      <div className="px-4 pb-4">
+        <Card>
+          <CardHeader className="pb-3">
+            <div className="flex items-center gap-2">
+              <CalendarDays className="w-5 h-5 text-primary shrink-0" />
+              <CardTitle className="text-base">Weekly Login Streak</CardTitle>
+            </div>
+            <CardDescription>
+              Log in 7 days this week to earn a bonus 0.5 SHUB
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {/* Day grid */}
+            <div className="grid grid-cols-7 gap-1">
+              {weekDayKeys.map((dayKey, idx) => {
+                const claimed = weeklyLoginDays.includes(dayKey)
+                return (
+                  <div key={dayKey} className="flex flex-col items-center gap-1">
+                    <span className="text-[10px] text-muted-foreground">{WEEK_DAYS[idx]}</span>
+                    <div
+                      className={cn(
+                        "w-8 h-8 rounded-full flex items-center justify-center transition-colors",
+                        claimed
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted text-muted-foreground",
+                      )}
+                    >
+                      {claimed ? (
+                        <CheckCircle className="w-4 h-4" />
+                      ) : (
+                        <Circle className="w-4 h-4" />
+                      )}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+
+            {/* Progress bar */}
+            <div className="space-y-1.5">
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>{weeklyProgress} / {WEEKLY_GOAL} days</span>
+                {weeklyProgress === WEEKLY_GOAL && (
+                  <span className="text-primary font-medium">Bonus earned!</span>
+                )}
+              </div>
+              <div className="h-2 bg-muted rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-primary rounded-full transition-all duration-500"
+                  style={{ width: `${(weeklyProgress / WEEKLY_GOAL) * 100}%` }}
+                />
+              </div>
+            </div>
+
+            {weeklyProgress === WEEKLY_GOAL && (
+              <div className="flex items-center gap-2 p-3 rounded-lg bg-primary/10 text-primary">
+                <CheckCircle className="w-4 h-4 shrink-0" />
+                <p className="text-xs font-medium">
+                  You earned the 7-day bonus of 0.5 SHUB this week!
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* ── Invite Friends ────────────────────────────────────────────────── */}
+      <div className="px-4 pb-4">
+        <Card>
+          <CardHeader className="pb-3">
+            <div className="flex items-center gap-2">
+              <UserPlus className="w-5 h-5 text-primary shrink-0" />
+              <CardTitle className="text-base">Invite Friends</CardTitle>
+            </div>
+            <CardDescription>
+              Earn SHUB tokens when friends join via your invite
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between p-3 rounded-lg bg-muted mb-3">
+              <span className="text-sm text-muted-foreground">Friends invited</span>
+              <span className="font-bold text-foreground">{inviteCount}</span>
+            </div>
+            <Button variant="outline" className="w-full bg-transparent" disabled>
+              <UserPlus className="w-4 h-4 mr-2" />
+              Share Invite Link (Coming Soon)
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* ── Transaction History ───────────────────────────────────────────── */}
+      <div className="px-4 pb-4">
+        <Card>
+          <CardHeader className="pb-3">
+            <div className="flex items-center gap-2">
+              <History className="w-5 h-5 text-primary shrink-0" />
+              <CardTitle className="text-base">Token History</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {!isReady ? (
+              <div className="space-y-2">
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-10 w-full" />
+              </div>
+            ) : transactions.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-4">
+                No transactions yet. Claim your first daily reward!
+              </p>
+            ) : (
+              <div className="divide-y divide-border">
+                {transactions.slice(0, 10).map((tx) => (
+                  <div
+                    key={tx.id}
+                    className="flex items-center justify-between py-3 gap-3"
+                  >
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium truncate">{tx.description}</p>
+                      <p className="text-xs text-muted-foreground">
+                        <TxTypeLabel type={tx.type} /> &middot;{" "}
+                        {new Date(tx.timestamp).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                    </div>
+                    <Badge
+                      variant="outline"
+                      className={cn(
+                        "shrink-0 text-xs",
+                        tx.amount > 0
+                          ? "border-primary/40 text-primary"
+                          : "border-destructive/40 text-destructive",
+                      )}
+                    >
+                      {tx.amount > 0 ? "+" : ""}
+                      {tx.amount.toFixed(3)} SHUB
+                    </Badge>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* ── How to Earn ───────────────────────────────────────────────────── */}
+      <div className="px-4 pb-2">
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">How to Earn SHUB Tokens</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-3 text-sm text-muted-foreground">
+              <li className="flex gap-3">
+                <span className="text-primary font-bold shrink-0 w-10">+5.00</span>
+                <span>One-time welcome bonus on your first login</span>
+              </li>
+              <li className="flex gap-3">
+                <span className="text-primary font-bold shrink-0 w-10">+0.15</span>
+                <span>Log in once per day to claim your daily reward</span>
+              </li>
+              <li className="flex gap-3">
+                <span className="text-primary font-bold shrink-0 w-10">+0.50</span>
+                <span>Log in 7 different days in the same week for a weekly bonus</span>
+              </li>
+              <li className="flex gap-3">
+                <span className="text-primary font-bold shrink-0 w-10">+SHUB</span>
+                <span>Invite friends to Social Hub Pi (coming soon)</span>
+              </li>
+            </ul>
+          </CardContent>
+        </Card>
+      </div>
+
+    </div>
+  )
+}
