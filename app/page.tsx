@@ -11,8 +11,7 @@ export default function HomePage() {
   return (
     <main
       style={{
-        background:
-          "linear-gradient(to bottom, #0f0f0f, #1a1a2e, #16213e)",
+        background: "linear-gradient(to bottom, #0f0f0f, #1a1a2e, #16213e)",
         minHeight: "100vh",
         color: "white",
         paddingBottom: "100px",
@@ -380,19 +379,19 @@ export default function HomePage() {
           >
             <h2>Create Post</h2>
 
-            <<textarea
-  value={postText}
-  onChange={(e) => setPostText(e.target.value)}
-  placeholder="What's happening?"
-  style={{
-    width: "100%",
-    height: "120px",
-    padding: "12px",
-    borderRadius: "12px",
-    border: "none",
-    marginTop: "15px",
-  }}
-/>
+            <textarea
+              value={postText}
+              onChange={(e) => setPostText(e.target.value)}
+              placeholder="What's happening?"
+              style={{
+                width: "100%",
+                height: "120px",
+                padding: "12px",
+                borderRadius: "12px",
+                border: "none",
+                marginTop: "15px",
+              }}
+            />
 
             <input
               type="file"
@@ -404,9 +403,9 @@ export default function HomePage() {
 
             <button
               onClick={() => {
-  alert(postText);
-  setShowPost(false);
-}}
+                alert(postText);
+                setShowPost(false);
+              }}
               style={{
                 marginTop: "20px",
                 width: "100%",
