@@ -85,6 +85,7 @@ const loadPiSDK = (): Promise<void> => {
 }
 
 export function PiAuthProvider({ children }: { children: ReactNode }) {
+  return <>{children}</>
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [authMessage, setAuthMessage] = useState("Initializing Pi Network...")
   const [piAccessToken, setPiAccessToken] = useState<string | null>(null)
