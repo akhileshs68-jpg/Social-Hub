@@ -1,87 +1,52 @@
-"use client"
-
-import { useState } from "react"
-
 export default function HomePage() {
-  const [entered, setEntered] = useState(false)
+  const posts = [
+    {
+      id: 1,
+      user: "Akhilesh",
+      text: "Welcome to Social Hub Pi 🔥",
+      image:
+        "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200",
+    },
+    {
+      id: 2,
+      user: "Pi Network",
+      text: "Mainnet is the future 🚀",
+      image:
+        "https://images.unsplash.com/photo-1639762681057-408e52192e55?q=80&w=1200",
+    },
+  ];
 
-  if (entered) {
-    return (
-      <main
-        style={{
-          minHeight: "100vh",
-          background: "#000",
-          color: "#fff",
-          padding: "20px",
-          fontFamily: "sans-serif",
-        }}
-      >
-        <h1 style={{ textAlign: "center", marginBottom: "30px" }}>
+  return (
+    <main className="min-h-screen bg-black text-white">
+      <div className="max-w-2xl mx-auto py-6 px-4">
+        <h1 className="text-4xl font-bold text-center mb-8">
           Social Feed 🚀
         </h1>
 
-        <div
-          style={{
-            background: "#111",
-            padding: "20px",
-            borderRadius: "16px",
-            marginBottom: "20px",
-          }}
-        >
-          <h2>Akhilesh</h2>
-          <p>Welcome to Social Hub Pi 🔥</p>
-        </div>
+        {posts.map((post) => (
+          <div
+            key={post.id}
+            className="bg-zinc-900 rounded-2xl overflow-hidden mb-6 border border-zinc-800"
+          >
+            <div className="p-4">
+              <h2 className="text-2xl font-bold">{post.user}</h2>
+              <p className="text-zinc-300 mt-2">{post.text}</p>
+            </div>
 
-        <div
-          style={{
-            background: "#111",
-            padding: "20px",
-            borderRadius: "16px",
-          }}
-        >
-          <h2>Pi Network</h2>
-          <p>Mainnet is the future 🚀</p>
-        </div>
-      </main>
-    )
-  }
+            <img
+              src={post.image}
+              alt="post"
+              className="w-full h-[300px] object-cover"
+            />
 
-  return (
-    <main
-      style={{
-        minHeight: "100vh",
-        background: "#000",
-        color: "#fff",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        flexDirection: "column",
-        fontFamily: "sans-serif",
-      }}
-    >
-      <h1 style={{ fontSize: "48px", marginBottom: "10px" }}>
-        Social Hub Pi 🚀
-      </h1>
-
-      <p style={{ fontSize: "18px", opacity: 0.7 }}>
-        Pi Network Social Platform
-      </p>
-
-      <button
-        onClick={() => setEntered(true)}
-        style={{
-          marginTop: "30px",
-          padding: "12px 24px",
-          background: "#9333ea",
-          border: "none",
-          borderRadius: "10px",
-          color: "#fff",
-          fontSize: "16px",
-          cursor: "pointer",
-        }}
-      >
-        Enter App
-      </button>
+            <div className="flex justify-between p-4 text-sm text-zinc-400">
+              <span>❤️ 120 Likes</span>
+              <span>💬 18 Comments</span>
+              <span>🔁 Share</span>
+            </div>
+          </div>
+        ))}
+      </div>
     </main>
-  )
+  );
 }
