@@ -1,6 +1,6 @@
 export default function HomePage() {
   return (
-    <main className="bg-black min-h-screen text-white pb-24">
+    <main className="bg-black min-h-screen text-white pb-40">
       
       <h1 className="text-5xl font-bold text-center py-6">
         Social Feed 🚀
@@ -47,7 +47,7 @@ export default function HomePage() {
       </div>
 
       {/* Bottom Navbar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-zinc-950 border-t border-zinc-800">
+      <div className="fixed bottom-0 left-0 right-0 bg-zinc-950 border-t border-zinc-800 z-50">
         <div className="flex justify-around items-center py-4 text-3xl">
           <button>🏠</button>
           <button>🔍</button>
