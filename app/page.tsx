@@ -1,4 +1,13 @@
+"use client";
+
+import { useState } from "react";
+
 export default function HomePage() {
+  const [likes, setLikes] = useState(1);
+  const [showComment, setShowComment] = useState(false);
+  const [showPost, setShowPost] = useState(false);
+  const [postText, setPostText] = useState("");
+
   return (
     <main
       style={{
@@ -35,7 +44,7 @@ export default function HomePage() {
         </h1>
       </div>
 
-      {/* Story Section */}
+      {/* Stories */}
 
       <div
         style={{
@@ -83,7 +92,7 @@ export default function HomePage() {
         )}
       </div>
 
-      {/* Post Card */}
+      {/* Post */}
 
       <div
         style={{
@@ -118,6 +127,7 @@ export default function HomePage() {
 
           <div>
             <h3 style={{ margin: 0 }}>Akhilesh</h3>
+
             <p
               style={{
                 margin: 0,
@@ -130,7 +140,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Post Image */}
+        {/* Image */}
 
         <img
           src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3"
@@ -141,7 +151,7 @@ export default function HomePage() {
           }}
         />
 
-        {/* Post Content */}
+        {/* Content */}
 
         <div style={{ padding: "20px" }}>
           <p
@@ -155,7 +165,7 @@ export default function HomePage() {
             Pi Network 🔥
           </p>
 
-          {/* Action Buttons */}
+          {/* Buttons */}
 
           <div
             style={{
@@ -165,6 +175,7 @@ export default function HomePage() {
             }}
           >
             <button
+              onClick={() => setLikes(likes + 1)}
               style={{
                 background: "rgba(168,85,247,0.2)",
                 border: "none",
@@ -174,10 +185,11 @@ export default function HomePage() {
                 cursor: "pointer",
               }}
             >
-              ❤️ Like
+              ❤️ {likes} Likes
             </button>
 
             <button
+              onClick={() => setShowComment(true)}
               style={{
                 background: "rgba(168,85,247,0.2)",
                 border: "none",
@@ -206,9 +218,10 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Floating Create Button */}
+      {/* Floating Button */}
 
       <button
+        onClick={() => setShowPost(true)}
         style={{
           position: "fixed",
           bottom: "90px",
@@ -229,7 +242,7 @@ export default function HomePage() {
         +
       </button>
 
-      {/* Bottom Navbar */}
+      {/* Navbar */}
 
       <div
         style={{
@@ -289,6 +302,126 @@ export default function HomePage() {
           👤
         </button>
       </div>
+
+      {/* Comment Modal */}
+
+      {showComment && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.7)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 9999,
+          }}
+        >
+          <div
+            style={{
+              background: "#1e1e2f",
+              padding: "30px",
+              borderRadius: "20px",
+              width: "300px",
+            }}
+          >
+            <h2>Comments</h2>
+
+            <input
+              placeholder="Write comment..."
+              style={{
+                width: "100%",
+                padding: "12px",
+                borderRadius: "10px",
+                border: "none",
+                marginTop: "15px",
+              }}
+            />
+
+            <button
+              onClick={() => setShowComment(false)}
+              style={{
+                marginTop: "20px",
+                width: "100%",
+                padding: "12px",
+                background: "#9333ea",
+                border: "none",
+                color: "white",
+                borderRadius: "12px",
+              }}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Create Post Modal */}
+
+      {showPost && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.7)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 9999,
+          }}
+        >
+          <div
+            style={{
+              background: "#1e1e2f",
+              padding: "30px",
+              borderRadius: "20px",
+              width: "320px",
+            }}
+          >
+            <h2>Create Post</h2>
+
+            <<textarea
+  value={postText}
+  onChange={(e) => setPostText(e.target.value)}
+  placeholder="What's happening?"
+  style={{
+    width: "100%",
+    height: "120px",
+    padding: "12px",
+    borderRadius: "12px",
+    border: "none",
+    marginTop: "15px",
+  }}
+/>
+
+            <input
+              type="file"
+              style={{
+                marginTop: "15px",
+                color: "white",
+              }}
+            />
+
+            <button
+              onClick={() => {
+  alert(postText);
+  setShowPost(false);
+}}
+              style={{
+                marginTop: "20px",
+                width: "100%",
+                padding: "12px",
+                background: "#9333ea",
+                border: "none",
+                color: "white",
+                borderRadius: "12px",
+              }}
+            >
+              Post
+            </button>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
