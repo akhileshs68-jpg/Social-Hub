@@ -3,114 +3,81 @@
 import { useState } from "react";
 
 export default function HomePage() {
-  const [likes, setLikes] = useState(1);
+  const [likes, setLikes] = useState(2);
   const [showComment, setShowComment] = useState(false);
-  const [showPost, setShowPost] = useState(false);
-  const [postText, setPostText] = useState("");
+  const [comments, setComments] = useState<string[]>([]);
+  const [commentText, setCommentText] = useState("");
+
+  const addComment = () => {
+    if (commentText.trim() === "") return;
+
+    setComments([...comments, commentText]);
+    setCommentText("");
+  };
 
   return (
     <main
       style={{
-        background: "linear-gradient(to bottom, #0f0f0f, #1a1a2e, #16213e)",
+        background:
+          "linear-gradient(to bottom, #050505, #111827, #1e1b4b)",
         minHeight: "100vh",
         color: "white",
-        paddingBottom: "100px",
+        paddingBottom: "120px",
         fontFamily: "Arial",
       }}
     >
       {/* Header */}
-
       <div
         style={{
-          position: "sticky",
-          top: 0,
-          background: "rgba(0,0,0,0.7)",
-          backdropFilter: "blur(10px)",
-          padding: "20px",
-          borderBottom: "1px solid #333",
-          zIndex: 100,
+          textAlign: "center",
+          padding: "35px 20px",
+          fontSize: "48px",
+          fontWeight: "bold",
+          color: "#a855f7",
+          textShadow: "0 0 20px #9333ea",
         }}
       >
-        <h1
-          style={{
-            textAlign: "center",
-            color: "#a855f7",
-            fontSize: "32px",
-            fontWeight: "bold",
-          }}
-        >
-          Pi Social Hub 🚀
-        </h1>
+        Pi Social Hub 🚀
       </div>
 
-      {/* Stories */}
-
+      {/* Top Menu */}
       <div
         style={{
           display: "flex",
-          gap: "15px",
-          overflowX: "auto",
-          padding: "20px",
+          justifyContent: "space-around",
+          padding: "15px",
+          background: "#09090b",
+          borderTop: "1px solid #27272a",
+          borderBottom: "1px solid #27272a",
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
         }}
       >
-        {["Akhilesh", "Pi News", "Crypto", "Mainnet", "Community"].map(
-          (item, i) => (
-            <div
-              key={i}
-              style={{
-                minWidth: "80px",
-                textAlign: "center",
-              }}
-            >
-              <div
-                style={{
-                  width: "70px",
-                  height: "70px",
-                  borderRadius: "50%",
-                  background:
-                    "linear-gradient(135deg,#9333ea,#7e22ce,#4c1d95)",
-                  padding: "3px",
-                  margin: "auto",
-                }}
-              >
-                <div
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    borderRadius: "50%",
-                    background: "#111",
-                  }}
-                ></div>
-              </div>
-
-              <p style={{ fontSize: "12px", marginTop: "8px" }}>
-                {item}
-              </p>
-            </div>
-          )
-        )}
+        <span>Akhilesh</span>
+        <span>Pi News</span>
+        <span>Crypto</span>
+        <span>Mainnet</span>
+        <span>Community</span>
       </div>
 
-      {/* Post */}
-
+      {/* Post Card */}
       <div
         style={{
-          background: "rgba(255,255,255,0.05)",
-          margin: "20px",
+          margin: "30px auto",
+          width: "95%",
+          background: "#1e1e2f",
           borderRadius: "25px",
           overflow: "hidden",
-          backdropFilter: "blur(15px)",
-          border: "1px solid rgba(255,255,255,0.1)",
-          boxShadow: "0 0 20px rgba(168,85,247,0.3)",
+          border: "1px solid #7e22ce",
+          boxShadow: "0 0 25px rgba(168,85,247,0.4)",
         }}
       >
-        {/* Post Header */}
-
+        {/* User */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "12px",
             padding: "20px",
           }}
         >
@@ -120,307 +87,184 @@ export default function HomePage() {
               height: "55px",
               borderRadius: "50%",
               background:
-                "linear-gradient(135deg,#9333ea,#7e22ce,#4c1d95)",
+                "linear-gradient(to bottom, #9333ea, #4c1d95)",
             }}
           ></div>
 
-          <div>
-            <h3 style={{ margin: 0 }}>Akhilesh</h3>
-
-            <p
-              style={{
-                margin: 0,
-                color: "#aaa",
-                fontSize: "13px",
-              }}
-            >
+          <div style={{ marginLeft: "15px" }}>
+            <h2 style={{ margin: 0 }}>Akhilesh</h2>
+            <p style={{ margin: 0, color: "#c4b5fd" }}>
               Pi Pioneer • 2 min ago
             </p>
           </div>
         </div>
 
         {/* Image */}
-
         <img
           src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3"
           style={{
             width: "100%",
-            height: "320px",
+            height: "500px",
             objectFit: "cover",
           }}
         />
 
-        {/* Content */}
-
-        <div style={{ padding: "20px" }}>
-          <p
-            style={{
-              fontSize: "16px",
-              lineHeight: "28px",
-              color: "#ddd",
-            }}
-          >
-            Welcome to the future of decentralized social media powered by
-            Pi Network 🔥
+        {/* Caption */}
+        <div style={{ padding: "25px" }}>
+          <p style={{ fontSize: "22px" }}>
+            Welcome to the future of decentralized social media powered by Pi
+            Network 🔥
           </p>
 
           {/* Buttons */}
-
           <div
             style={{
               display: "flex",
               justifyContent: "space-around",
-              marginTop: "20px",
+              marginTop: "25px",
             }}
           >
+            {/* Like */}
             <button
               onClick={() => setLikes(likes + 1)}
               style={{
-                background: "rgba(168,85,247,0.2)",
-                border: "none",
+                background: "#4c1d95",
                 color: "white",
-                padding: "12px 18px",
+                border: "none",
+                padding: "14px 25px",
                 borderRadius: "15px",
                 cursor: "pointer",
+                fontSize: "18px",
               }}
             >
               ❤️ {likes} Likes
             </button>
 
+            {/* Comment */}
             <button
-              onClick={() => setShowComment(true)}
+              onClick={() => setShowComment(!showComment)}
               style={{
-                background: "rgba(168,85,247,0.2)",
-                border: "none",
+                background: "#4c1d95",
                 color: "white",
-                padding: "12px 18px",
+                border: "none",
+                padding: "14px 25px",
                 borderRadius: "15px",
                 cursor: "pointer",
+                fontSize: "18px",
               }}
             >
               💬 Comment
             </button>
 
+            {/* Share */}
             <button
               style={{
-                background: "rgba(168,85,247,0.2)",
-                border: "none",
+                background: "#4c1d95",
                 color: "white",
-                padding: "12px 18px",
+                border: "none",
+                padding: "14px 25px",
                 borderRadius: "15px",
                 cursor: "pointer",
+                fontSize: "18px",
               }}
             >
               📤 Share
             </button>
           </div>
+
+          {/* Comment Section */}
+          {showComment && (
+            <div style={{ marginTop: "30px" }}>
+              <input
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+                placeholder="Write comment..."
+                style={{
+                  width: "100%",
+                  padding: "15px",
+                  borderRadius: "12px",
+                  border: "none",
+                  outline: "none",
+                  fontSize: "16px",
+                  marginBottom: "15px",
+                }}
+              />
+
+              <button
+                onClick={addComment}
+                style={{
+                  background: "#9333ea",
+                  color: "white",
+                  border: "none",
+                  padding: "12px 25px",
+                  borderRadius: "12px",
+                  cursor: "pointer",
+                }}
+              >
+                Post Comment
+              </button>
+
+              {/* Comment List */}
+              <div style={{ marginTop: "20px" }}>
+                {comments.map((comment, index) => (
+                  <div
+                    key={index}
+                    style={{
+                      background: "#27272a",
+                      padding: "15px",
+                      borderRadius: "12px",
+                      marginTop: "10px",
+                    }}
+                  >
+                    💜 {comment}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Floating Button */}
-
+      {/* Floating Add Button */}
       <button
-        onClick={() => setShowPost(true)}
         style={{
           position: "fixed",
-          bottom: "90px",
+          bottom: "100px",
           right: "25px",
-          width: "65px",
-          height: "65px",
+          width: "75px",
+          height: "75px",
           borderRadius: "50%",
           border: "none",
           background:
-            "linear-gradient(135deg,#9333ea,#7e22ce,#4c1d95)",
+            "linear-gradient(to bottom, #9333ea, #4c1d95)",
           color: "white",
-          fontSize: "35px",
-          boxShadow: "0 0 25px rgba(168,85,247,0.8)",
+          fontSize: "40px",
           cursor: "pointer",
-          zIndex: 999,
+          boxShadow: "0 0 25px #9333ea",
         }}
       >
         +
       </button>
 
-      {/* Navbar */}
-
+      {/* Bottom Navbar */}
       <div
         style={{
           position: "fixed",
           bottom: 0,
           left: 0,
           right: 0,
-          background: "rgba(0,0,0,0.85)",
-          backdropFilter: "blur(12px)",
+          background: "#050505",
           display: "flex",
           justifyContent: "space-around",
-          padding: "18px",
-          borderTop: "1px solid #333",
+          padding: "20px",
+          borderTop: "1px solid #27272a",
         }}
       >
-        <button
-          style={{
-            background: "none",
-            border: "none",
-            color: "#a855f7",
-            fontSize: "28px",
-          }}
-        >
-          🏠
-        </button>
-
-        <button
-          style={{
-            background: "none",
-            border: "none",
-            color: "white",
-            fontSize: "28px",
-          }}
-        >
-          🔍
-        </button>
-
-        <button
-          style={{
-            background: "none",
-            border: "none",
-            color: "white",
-            fontSize: "28px",
-          }}
-        >
-          🔔
-        </button>
-
-        <button
-          style={{
-            background: "none",
-            border: "none",
-            color: "white",
-            fontSize: "28px",
-          }}
-        >
-          👤
-        </button>
+        <span style={{ fontSize: "32px" }}>🏠</span>
+        <span style={{ fontSize: "32px" }}>🔍</span>
+        <span style={{ fontSize: "32px" }}>🔔</span>
+        <span style={{ fontSize: "32px" }}>👤</span>
       </div>
-
-      {/* Comment Modal */}
-
-      {showComment && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0,0,0,0.7)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 9999,
-          }}
-        >
-          <div
-            style={{
-              background: "#1e1e2f",
-              padding: "30px",
-              borderRadius: "20px",
-              width: "300px",
-            }}
-          >
-            <h2>Comments</h2>
-
-            <input
-              placeholder="Write comment..."
-              style={{
-                width: "100%",
-                padding: "12px",
-                borderRadius: "10px",
-                border: "none",
-                marginTop: "15px",
-              }}
-            />
-
-            <button
-              onClick={() => setShowComment(false)}
-              style={{
-                marginTop: "20px",
-                width: "100%",
-                padding: "12px",
-                background: "#9333ea",
-                border: "none",
-                color: "white",
-                borderRadius: "12px",
-              }}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Create Post Modal */}
-
-      {showPost && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0,0,0,0.7)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 9999,
-          }}
-        >
-          <div
-            style={{
-              background: "#1e1e2f",
-              padding: "30px",
-              borderRadius: "20px",
-              width: "320px",
-            }}
-          >
-            <h2>Create Post</h2>
-
-            <textarea
-              value={postText}
-              onChange={(e) => setPostText(e.target.value)}
-              placeholder="What's happening?"
-              style={{
-                width: "100%",
-                height: "120px",
-                padding: "12px",
-                borderRadius: "12px",
-                border: "none",
-                marginTop: "15px",
-              }}
-            />
-
-            <input
-              type="file"
-              style={{
-                marginTop: "15px",
-                color: "white",
-              }}
-            />
-
-            <button
-              onClick={() => {
-                alert(postText);
-                setShowPost(false);
-              }}
-              style={{
-                marginTop: "20px",
-                width: "100%",
-                padding: "12px",
-                background: "#9333ea",
-                border: "none",
-                color: "white",
-                borderRadius: "12px",
-              }}
-            >
-              Post
-            </button>
-          </div>
-        </div>
-      )}
     </main>
   );
 }
