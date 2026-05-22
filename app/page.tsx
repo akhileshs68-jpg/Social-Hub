@@ -101,7 +101,8 @@ export default function HomePage() {
 
         {/* Image */}
         <img
-          src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3"
+          src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop"
+          alt="Pi Post"
           style={{
             width: "100%",
             height: "500px",
