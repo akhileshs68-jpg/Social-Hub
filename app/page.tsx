@@ -3,16 +3,33 @@
 import { useState } from "react";
 
 export default function HomePage() {
-  const [likes, setLikes] = useState(2);
-  const [showComment, setShowComment] = useState(false);
-  const [comments, setComments] = useState<string[]>([]);
-  const [commentText, setCommentText] = useState("");
+  const [likes, setLikes] = useState(1);
 
-  const addComment = () => {
-    if (commentText.trim() === "") return;
+  const [posts, setPosts] = useState([
+    {
+      text: "Welcome to Pi Social Hub 🚀",
+      image:
+        "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop",
+    },
+  ]);
 
-    setComments([...comments, commentText]);
-    setCommentText("");
+  const [showPostBox, setShowPostBox] = useState(false);
+  const [postText, setPostText] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+
+  const createPost = () => {
+    if (!postText || !imageUrl) return;
+
+    const newPost = {
+      text: postText,
+      image: imageUrl,
+    };
+
+    setPosts([newPost, ...posts]);
+
+    setPostText("");
+    setImageUrl("");
+    setShowPostBox(false);
   };
 
   return (
@@ -22,16 +39,16 @@ export default function HomePage() {
           "linear-gradient(to bottom, #050505, #111827, #1e1b4b)",
         minHeight: "100vh",
         color: "white",
-        paddingBottom: "120px",
         fontFamily: "Arial",
+        paddingBottom: "120px",
       }}
     >
       {/* Header */}
       <div
         style={{
           textAlign: "center",
-          padding: "35px 20px",
-          fontSize: "48px",
+          padding: "30px",
+          fontSize: "45px",
           fontWeight: "bold",
           color: "#a855f7",
           textShadow: "0 0 20px #9333ea",
@@ -40,7 +57,7 @@ export default function HomePage() {
         Pi Social Hub 🚀
       </div>
 
-      {/* Top Menu */}
+      {/* Menu */}
       <div
         style={{
           display: "flex",
@@ -49,9 +66,6 @@ export default function HomePage() {
           background: "#09090b",
           borderTop: "1px solid #27272a",
           borderBottom: "1px solid #27272a",
-          position: "sticky",
-          top: 0,
-          zIndex: 100,
         }}
       >
         <span>Akhilesh</span>
@@ -61,173 +75,196 @@ export default function HomePage() {
         <span>Community</span>
       </div>
 
-      {/* Post Card */}
-      <div
-        style={{
-          margin: "30px auto",
-          width: "95%",
-          background: "#1e1e2f",
-          borderRadius: "25px",
-          overflow: "hidden",
-          border: "1px solid #7e22ce",
-          boxShadow: "0 0 25px rgba(168,85,247,0.4)",
-        }}
-      >
-        {/* User */}
+      {/* Create Post Popup */}
+      {showPostBox && (
         <div
           style={{
-            display: "flex",
-            alignItems: "center",
-            padding: "20px",
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "90%",
+            maxWidth: "500px",
+            background: "#18181b",
+            padding: "25px",
+            borderRadius: "20px",
+            zIndex: 999,
+            border: "1px solid #9333ea",
+            boxShadow: "0 0 30px #9333ea",
           }}
         >
-          <div
+          <h2>Create New Post</h2>
+
+          <textarea
+            placeholder="Write something..."
+            value={postText}
+            onChange={(e) => setPostText(e.target.value)}
             style={{
-              width: "55px",
-              height: "55px",
-              borderRadius: "50%",
-              background:
-                "linear-gradient(to bottom, #9333ea, #4c1d95)",
+              width: "100%",
+              height: "100px",
+              marginTop: "15px",
+              padding: "15px",
+              borderRadius: "12px",
+              border: "none",
+              background: "#27272a",
+              color: "white",
             }}
-          ></div>
+          />
 
-          <div style={{ marginLeft: "15px" }}>
-            <h2 style={{ margin: 0 }}>Akhilesh</h2>
-            <p style={{ margin: 0, color: "#c4b5fd" }}>
-              Pi Pioneer • 2 min ago
-            </p>
-          </div>
+          <input
+            placeholder="Paste image URL..."
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+            style={{
+              width: "100%",
+              marginTop: "15px",
+              padding: "15px",
+              borderRadius: "12px",
+              border: "none",
+              background: "#27272a",
+              color: "white",
+            }}
+          />
+
+          <button
+            onClick={createPost}
+            style={{
+              marginTop: "20px",
+              width: "100%",
+              padding: "15px",
+              border: "none",
+              borderRadius: "12px",
+              background:
+                "linear-gradient(to right, #9333ea, #7e22ce)",
+              color: "white",
+              fontSize: "18px",
+              cursor: "pointer",
+            }}
+          >
+            🚀 Post Now
+          </button>
         </div>
+      )}
 
-        {/* Image */}
-        <img
-          src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop"
-          alt="Pi Post"
+      {/* Posts */}
+      {posts.map((post, index) => (
+        <div
+          key={index}
           style={{
-            width: "100%",
-            height: "500px",
-            objectFit: "cover",
+            margin: "30px auto",
+            width: "95%",
+            background: "#1e1e2f",
+            borderRadius: "25px",
+            overflow: "hidden",
+            border: "1px solid #7e22ce",
+            boxShadow: "0 0 25px rgba(168,85,247,0.4)",
           }}
-        />
-
-        {/* Caption */}
-        <div style={{ padding: "25px" }}>
-          <p style={{ fontSize: "22px" }}>
-            Welcome to the future of decentralized social media powered by Pi
-            Network 🔥
-          </p>
-
-          {/* Buttons */}
+        >
+          {/* User */}
           <div
             style={{
               display: "flex",
-              justifyContent: "space-around",
-              marginTop: "25px",
+              alignItems: "center",
+              padding: "20px",
             }}
           >
-            {/* Like */}
-            <button
-              onClick={() => setLikes(likes + 1)}
+            <div
               style={{
-                background: "#4c1d95",
-                color: "white",
-                border: "none",
-                padding: "14px 25px",
-                borderRadius: "15px",
-                cursor: "pointer",
-                fontSize: "18px",
+                width: "55px",
+                height: "55px",
+                borderRadius: "50%",
+                background:
+                  "linear-gradient(to bottom, #9333ea, #4c1d95)",
               }}
-            >
-              ❤️ {likes} Likes
-            </button>
+            ></div>
 
-            {/* Comment */}
-            <button
-              onClick={() => setShowComment(!showComment)}
-              style={{
-                background: "#4c1d95",
-                color: "white",
-                border: "none",
-                padding: "14px 25px",
-                borderRadius: "15px",
-                cursor: "pointer",
-                fontSize: "18px",
-              }}
-            >
-              💬 Comment
-            </button>
+            <div style={{ marginLeft: "15px" }}>
+              <h2 style={{ margin: 0 }}>Akhilesh</h2>
 
-            {/* Share */}
-            <button
-              style={{
-                background: "#4c1d95",
-                color: "white",
-                border: "none",
-                padding: "14px 25px",
-                borderRadius: "15px",
-                cursor: "pointer",
-                fontSize: "18px",
-              }}
-            >
-              📤 Share
-            </button>
-          </div>
-
-          {/* Comment Section */}
-          {showComment && (
-            <div style={{ marginTop: "30px" }}>
-              <input
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-                placeholder="Write comment..."
+              <p
                 style={{
-                  width: "100%",
-                  padding: "15px",
-                  borderRadius: "12px",
-                  border: "none",
-                  outline: "none",
-                  fontSize: "16px",
-                  marginBottom: "15px",
-                }}
-              />
-
-              <button
-                onClick={addComment}
-                style={{
-                  background: "#9333ea",
-                  color: "white",
-                  border: "none",
-                  padding: "12px 25px",
-                  borderRadius: "12px",
-                  cursor: "pointer",
+                  margin: 0,
+                  color: "#c4b5fd",
                 }}
               >
-                Post Comment
+                Pi Pioneer • now
+              </p>
+            </div>
+          </div>
+
+          {/* Image */}
+          <img
+            src={post.image}
+            alt="post"
+            style={{
+              width: "100%",
+              height: "500px",
+              objectFit: "cover",
+            }}
+          />
+
+          {/* Caption */}
+          <div style={{ padding: "25px" }}>
+            <p style={{ fontSize: "22px" }}>{post.text}</p>
+
+            {/* Buttons */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-around",
+                marginTop: "25px",
+              }}
+            >
+              <button
+                onClick={() => setLikes(likes + 1)}
+                style={{
+                  background: "#4c1d95",
+                  color: "white",
+                  border: "none",
+                  padding: "14px 25px",
+                  borderRadius: "15px",
+                  cursor: "pointer",
+                  fontSize: "18px",
+                }}
+              >
+                ❤️ {likes} Likes
               </button>
 
-              {/* Comment List */}
-              <div style={{ marginTop: "20px" }}>
-                {comments.map((comment, index) => (
-                  <div
-                    key={index}
-                    style={{
-                      background: "#27272a",
-                      padding: "15px",
-                      borderRadius: "12px",
-                      marginTop: "10px",
-                    }}
-                  >
-                    💜 {comment}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
+              <button
+                style={{
+                  background: "#4c1d95",
+                  color: "white",
+                  border: "none",
+                  padding: "14px 25px",
+                  borderRadius: "15px",
+                  cursor: "pointer",
+                  fontSize: "18px",
+                }}
+              >
+                💬 Comment
+              </button>
 
-      {/* Floating Add Button */}
+              <button
+                style={{
+                  background: "#4c1d95",
+                  color: "white",
+                  border: "none",
+                  padding: "14px 25px",
+                  borderRadius: "15px",
+                  cursor: "pointer",
+                  fontSize: "18px",
+                }}
+              >
+                📤 Share
+              </button>
+            </div>
+          </div>
+        </div>
+      ))}
+
+      {/* Floating Button */}
       <button
+        onClick={() => setShowPostBox(true)}
         style={{
           position: "fixed",
           bottom: "100px",
