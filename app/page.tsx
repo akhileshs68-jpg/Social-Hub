@@ -60,7 +60,23 @@ export default function HomePage() {
           <button>👤</button>
         </div>
       </div>
-
+     <div style={{
+  position: "fixed",
+  bottom: "0",
+  left: "0",
+  right: "0",
+backgroundColor: "black",
+padding: "20px",
+display: "flex",
+justifyContent: "space-around",
+zIndex: 9999
+}}>
+  <button>🏠</button>
+  <button>🔍</button>
+  <button>➕</button>
+  <button>🔔</button>
+  <button>👤</button>
+</div>
     </main>
   )
 }
