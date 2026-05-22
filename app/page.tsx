@@ -17,8 +17,8 @@ export default function HomePage() {
   ];
 
   return (
-    <main className="min-h-screen bg-black text-white">
-      <div className="max-w-2xl mx-auto py-6 px-4">
+    <main className="min-h-screen bg-black text-white pb-24">
+      <div className="max-w-2xl mx-auto py-6">
         <h1 className="text-4xl font-bold text-center mb-8">
           Social Feed 🚀
         </h1>
@@ -30,6 +30,7 @@ export default function HomePage() {
           >
             <div className="p-4">
               <h2 className="text-2xl font-bold">{post.user}</h2>
+
               <p className="text-zinc-300 mt-2">{post.text}</p>
             </div>
 
@@ -46,6 +47,21 @@ export default function HomePage() {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Bottom Navbar */}
+      <div className="fixed bottom-0 left-0 right-0 bg-zinc-950 border-t border-zinc-800">
+        <div className="max-w-2xl mx-auto flex justify-around items-center py-4 text-white text-xl">
+          <button>🏠</button>
+          <button>🔍</button>
+
+          <button className="bg-purple-600 px-5 py-2 rounded-full text-base font-bold">
+            ➕ Post
+          </button>
+
+          <button>🔔</button>
+          <button>👤</button>
+        </div>
       </div>
     </main>
   );
