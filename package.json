@@ -39,17 +39,27 @@
     "@radix-ui/react-tooltip": "1.1.6",
     "autoprefixer": "^10.4.20",
     "class-variance-authority": "^0.7.1",
+<<<<<<< HEAD
     "cloudinary": "^2.10.0",
+=======
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
     "clsx": "^2.1.1",
     "cmdk": "1.0.4",
     "date-fns": "4.1.0",
     "embla-carousel-react": "8.5.1",
+<<<<<<< HEAD
     "framer-motion": "^12.40.0",
     "geist": "latest",
     "input-otp": "1.4.1",
     "lucide-react": "^0.454.0",
     "next": "15.2.4",
     "next-cloudinary": "^6.17.5",
+=======
+    "geist": "latest",
+    "input-otp": "1.4.1",
+    "lucide-react": "^0.454.0",
+    "next": "16.1.3",
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
     "next-themes": "^0.4.6",
     "react": "^19",
     "react-day-picker": "9.8.0",
@@ -73,4 +83,8 @@
     "tw-animate-css": "1.3.3",
     "typescript": "^5"
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb

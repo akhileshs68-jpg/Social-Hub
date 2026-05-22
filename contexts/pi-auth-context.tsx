@@ -131,6 +131,7 @@ export function PiAuthProvider({ children }: { children: ReactNode }) {
   }
 
   const authenticateAndLogin = async (): Promise<void> => {
+<<<<<<< HEAD
     const isLocalhost =
   typeof window !== "undefined" &&
   window.location.hostname === "localhost"
@@ -157,6 +158,8 @@ if (isLocalhost) {
 
   return
 }
+=======
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
     setAuthMessage("Authenticating with Pi Network...")
     const piAuthResult = await window.Pi.authenticate(["username", "payments"])
 

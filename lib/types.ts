@@ -21,6 +21,7 @@ export interface Post {
   createdAt?: string
   moderationFlag?: "pending" | "approved" | "flagged"
   isEdited?: boolean
+<<<<<<< HEAD
   // Monetization fields
   tipsReceived?: number
   creatorEarnings?: number
@@ -50,6 +51,8 @@ export interface Streak {
   maxCount: number
   lastActivityDate: string
   rewardAmount: number
+=======
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
 }
 
 export interface User {
@@ -64,6 +67,7 @@ export interface User {
   loginTimestamp?: string
   location?: string
   website?: string
+<<<<<<< HEAD
   // SHUB Token system fields
   shub_tokens?: number
   first_login_reward?: boolean
@@ -106,13 +110,23 @@ export type SHPTokenTransaction = SHUBTokenTransaction
 export interface Notification {
   id: string
   type: "like" | "comment" | "follow" | "message" | "premium" | "mention"
+=======
+}
+
+export interface Notification {
+  id: string
+  type: "like" | "comment" | "follow" | "mention" | "message" | "premium"
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
   user: string
   avatar: string
   content: string
   time: string
   read: boolean
+<<<<<<< HEAD
   actionUrl?: string
   actionLabel?: string
+=======
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
 }
 
 export interface TrendingTopic {
@@ -184,6 +198,7 @@ export interface StatusGroup {
   hasUnseen: boolean
 }
 
+<<<<<<< HEAD
 export type MessageType = "text" | "image" | "video" | "audio" | "file" | "voice" | "link"
 
 export interface MessageReactionEntry {
@@ -193,6 +208,8 @@ export interface MessageReactionEntry {
   users: string[] // usernames
 }
 
+=======
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
 export interface Message {
   id: string
   conversationId: string
@@ -202,16 +219,23 @@ export interface Message {
   content: string
   timestamp: string
   status: "sending" | "sent" | "delivered" | "read"
+<<<<<<< HEAD
   type: MessageType
   mediaUrl?: string
   mediaThumb?: string
   fileName?: string
   fileSize?: number // bytes
   duration?: number // seconds for audio/voice/video
+=======
+  type: "text" | "image" | "video" | "audio"
+  mediaUrl?: string
+  mediaThumb?: string
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
   replyTo?: {
     id: string
     content: string
     senderUsername: string
+<<<<<<< HEAD
     type?: MessageType
   }
   forwardedFrom?: {
@@ -222,6 +246,11 @@ export interface Message {
   isEdited?: boolean
   editedAt?: string
   isDeleted?: boolean
+=======
+  }
+  isEdited?: boolean
+  editedAt?: string
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
 }
 
 export interface Conversation {
@@ -237,9 +266,12 @@ export interface Conversation {
   groupAvatar?: string
   groupDescription?: string
   adminIds?: string[]
+<<<<<<< HEAD
   moderatorIds?: string[]
   isPublic?: boolean
   inviteLink?: string
+=======
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
   muteUntil?: string
   isPinned?: boolean
 }
@@ -250,6 +282,7 @@ export interface ConversationParticipant {
   avatar: string
   isOnline: boolean
   lastSeen?: string
+<<<<<<< HEAD
   role?: "admin" | "moderator" | "member"
   joinedAt?: string
 }
@@ -262,6 +295,12 @@ export interface GroupSettings {
   inviteLink: string
 }
 
+=======
+  role?: "admin" | "member" // For groups
+  joinedAt?: string
+}
+
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
 export interface TypingIndicator {
   conversationId: string
   userId: string

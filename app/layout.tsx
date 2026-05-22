@@ -28,7 +28,11 @@ html {
 }
         `}</style>
       </head>
+<<<<<<< HEAD
       <body className="bg-black text-white antialiased overflow-x-hidden">
+=======
+      <body>
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange={false}>
           <AppWrapper>{children}</AppWrapper>
         </ThemeProvider>

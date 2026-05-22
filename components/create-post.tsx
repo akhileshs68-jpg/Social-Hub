@@ -48,6 +48,7 @@ export function CreatePost() {
 
     setIsUploading(true)
     try {
+<<<<<<< HEAD
       const formData = new FormData()
 formData.append("file", file)
 formData.append("upload_preset", "ml_default")
@@ -72,6 +73,10 @@ setMedia([
     file,
   },
 ])
+=======
+      const compressedUrl = await compressImage(file)
+      setMedia([...media, { type: "image", url: compressedUrl, file }])
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
       toast({
         title: "Image Added",
         description: `${file.name} (${formatFileSize(file.size)})`,
@@ -102,6 +107,7 @@ setMedia([
       return
     }
 
+<<<<<<< HEAD
     const reader = new FileReader()
 
 reader.onloadend = () => {
@@ -124,13 +130,25 @@ reader.onloadend = () => {
 
 reader.readAsDataURL(file)
    
+=======
+    const videoUrl = URL.createObjectURL(file)
+    setMedia([...media, { type: "video", url: videoUrl, file }])
+    toast({
+      title: "Video Added",
+      description: `${file.name} (${formatFileSize(file.size)})`,
+    })
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
 
     if (videoInputRef.current) videoInputRef.current.value = ""
   }
 
   const removeMedia = (index: number) => {
     const newMedia = media.filter((_, i) => i !== index)
+<<<<<<< HEAD
    
+=======
+    URL.revokeObjectURL(media[index].url)
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
     setMedia(newMedia)
   }
 
@@ -155,6 +173,10 @@ reader.readAsDataURL(file)
         comments: 0,
         shares: 0,
         isLiked: false,
+<<<<<<< HEAD
+=======
+        isSaved: false,
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
         piUid: userProfile?.piUid,
         createdAt: new Date().toISOString(),
         moderationFlag: "approved",
@@ -170,9 +192,15 @@ reader.readAsDataURL(file)
 
       // Clean up and reset
       media.forEach((m) => URL.revokeObjectURL(m.url))
+<<<<<<< HEAD
       
       setMedia([])
       
+=======
+      setContent("")
+      setMedia([])
+      setIsExpanded(false)
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
 
       toast({
         title: "Post Created",
@@ -196,7 +224,11 @@ reader.readAsDataURL(file)
   }
 
   return (
+<<<<<<< HEAD
     <div className="flex gap-3 bg-[#080808] border border-white/10 rounded-[28px] p-4">
+=======
+    <div className="flex gap-3">
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
       <Avatar className="w-10 h-10 shrink-0">
         <AvatarFallback className="bg-primary text-primary-foreground">
           {username[0]?.toUpperCase() || "P"}
@@ -209,7 +241,11 @@ reader.readAsDataURL(file)
           value={content}
           onChange={(e) => setContent(e.target.value)}
           onFocus={() => setIsExpanded(true)}
+<<<<<<< HEAD
           className="min-h-[60px] max-h-[200px] resize-none border border-white/10 bg-[#0B0B0C] text-white rounded-2xl px-4 py-3 placeholder:text-gray-500 focus-visible:ring-1 focus-visible:ring-[#F4B814]"
+=======
+          className="min-h-[60px] max-h-[200px] resize-none border-0 bg-transparent p-0 focus-visible:ring-0 text-base"
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
           aria-label="Create post"
         />
 
@@ -219,6 +255,7 @@ reader.readAsDataURL(file)
               <div key={index} className="relative rounded-lg overflow-hidden bg-muted aspect-square">
                 {item.type === "image" ? (
                   <img
+<<<<<<< HEAD
   src={item.url || "/placeholder.svg"}
   crossOrigin="anonymous"
   alt="Upload preview"
@@ -234,6 +271,14 @@ reader.readAsDataURL(file)
 >
   <source src={media[0].url} type="video/mp4" />
 </video>
+=======
+                    src={item.url || "/placeholder.svg"}
+                    alt="Upload preview"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <video src={item.url} className="w-full h-full object-cover" controls />
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
                 )}
                 <Button
                   size="icon"

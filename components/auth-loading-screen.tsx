@@ -2,6 +2,7 @@
 
 import { usePiAuth } from "@/contexts/pi-auth-context"
 import { Button } from "@/components/ui/button"
+<<<<<<< HEAD
 import { useEffect, useState } from "react"
 
 export function AuthLoadingScreen() {
@@ -17,6 +18,12 @@ if (!mounted) {
 }
 
 const isError = authMessage?.toLowerCase().includes("failed")
+=======
+
+export function AuthLoadingScreen() {
+  const { authMessage, reinitialize } = usePiAuth()
+  const isError = authMessage.toLowerCase().includes("failed")
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">

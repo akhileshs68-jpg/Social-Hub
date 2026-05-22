@@ -106,7 +106,11 @@ export function StoriesBar() {
 
   return (
     <>
+<<<<<<< HEAD
       <div className="bg-black border-b border-white/10 overflow-x-auto">
+=======
+      <div className="bg-card border-b border-border overflow-x-auto">
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
         <div className="flex gap-4 p-4 min-w-max">
           {/* Add Your Status */}
           <button

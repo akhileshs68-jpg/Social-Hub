@@ -1,5 +1,6 @@
 "use client"
 
+<<<<<<< HEAD
 import { useState } from "react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -9,6 +10,17 @@ import { PostCard } from "@/components/post-card"
 import type { Post } from "@/lib/types"
 import { usePiAuth } from "@/contexts/pi-auth-context"
 import { useSHUBToken } from "@/contexts/shub-token-context"
+=======
+import { useState, useEffect } from "react"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Settings, MapPin, Calendar, LinkIcon, LogOut, Crown } from "lucide-react"
+import { PostCard } from "@/components/post-card"
+import type { Post } from "@/lib/types"
+import { usePiAuth } from "@/contexts/pi-auth-context"
+import { piPaymentService } from "@/lib/pi-payment-service"
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
 
 interface ProfileProps {
   username: string
@@ -31,7 +43,21 @@ const USER_POSTS: Post[] = [
 
 export function Profile({ username, userId }: ProfileProps) {
   const { userProfile, logout } = usePiAuth()
+<<<<<<< HEAD
   const { tokens, isReady: tokensReady } = useSHUBToken()
+=======
+  const [isPremium, setIsPremium] = useState(false)
+
+  useEffect(() => {
+    const checkPremiumStatus = async () => {
+      if (userProfile?.id) {
+        const subscription = await piPaymentService.getUserSubscription(userProfile.id)
+        setIsPremium(piPaymentService.isPremiumActive(subscription))
+      }
+    }
+    checkPremiumStatus()
+  }, [userProfile])
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
 
   const displayUsername = userProfile?.username || username
   const displayBio =
@@ -76,6 +102,7 @@ export function Profile({ username, userId }: ProfileProps) {
           </div>
 
           <div className="mt-3">
+<<<<<<< HEAD
             <div className="flex items-center gap-2 flex-wrap">
               <h2 className="text-xl font-bold flex items-center gap-1">
                 {displayUsername}
@@ -95,6 +122,16 @@ export function Profile({ username, userId }: ProfileProps) {
                   {tokens.toFixed(3)} SHUB
                 </Badge>
               )}
+=======
+            <div className="flex items-center gap-2">
+              <h2 className="text-xl font-bold">{displayUsername}</h2>
+              {isPremium && (
+                <Badge className="bg-gradient-to-r from-yellow-500 to-amber-600 text-white border-0">
+                  <Crown className="w-3 h-3 mr-1" />
+                  Premium
+                </Badge>
+              )}
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
             </div>
             <p className="text-sm text-muted-foreground">@{displayUsername}</p>
             {userProfile?.piUid && (

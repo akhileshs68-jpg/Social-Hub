@@ -168,6 +168,7 @@ export const mockMessages: Record<string, Message[]> = {
       senderId: "user1",
       senderUsername: "alexchen",
       senderAvatar: "A",
+<<<<<<< HEAD
       content: "I'm doing great! Just mining some Pi",
       timestamp: new Date(Date.now() - 3300000).toISOString(),
       status: "read",
@@ -175,6 +176,12 @@ export const mockMessages: Record<string, Message[]> = {
       reactions: {
         "👍": { emoji: "👍", count: 1, reactedByMe: true, users: ["You"] },
       },
+=======
+      content: "I'm doing great! Just mining some Pi 😊",
+      timestamp: new Date(Date.now() - 3300000).toISOString(),
+      status: "read",
+      type: "text",
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
     },
     {
       id: "msg1-3",
@@ -186,10 +193,13 @@ export const mockMessages: Record<string, Message[]> = {
       timestamp: new Date(Date.now() - 300000).toISOString(),
       status: "read",
       type: "text",
+<<<<<<< HEAD
       reactions: {
         "❤️": { emoji: "❤️", count: 2, reactedByMe: false, users: ["sarahkim", "mikejones"] },
         "🔥": { emoji: "🔥", count: 1, reactedByMe: true, users: ["You"] },
       },
+=======
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
     },
     {
       id: "msg1-4",
