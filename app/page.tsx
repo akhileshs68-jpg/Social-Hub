@@ -32,6 +32,7 @@ type: "image",
 
     setPostText("");
     setImageUrl("");
+    setMediaType("image");
     setShowPostBox(false);
   };
 
