@@ -8,9 +8,9 @@ export default function HomePage() {
   const [posts, setPosts] = useState([
     {
       text: "Welcome to Pi Social Hub 🚀",
-media:
-  "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop",
-type: "image",
+      media:
+        "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop",
+      type: "image",
     },
   ]);
 
@@ -23,12 +23,12 @@ type: "image",
     if (!postText || !imageUrl) return;
 
     const newPost = {
-  text: postText,
-  media: imageUrl,
-  type: mediaType,
-};
+      text: postText,
+      media: imageUrl,
+      type: mediaType,
+    };
 
-    setPosts([newPost, ...posts]);
+    setPosts((prev) => [newPost, ...prev]);
 
     setPostText("");
     setImageUrl("");
@@ -43,136 +43,38 @@ type: "image",
           "linear-gradient(to bottom, #050505, #111827, #1e1b4b)",
         minHeight: "100vh",
         color: "white",
+        paddingBottom: "100px",
         fontFamily: "Arial",
-        paddingBottom: "120px",
       }}
     >
       {/* Header */}
       <div
         style={{
           textAlign: "center",
-          padding: "30px",
+          padding: "25px",
           fontSize: "45px",
           fontWeight: "bold",
-          color: "#a855f7",
-          textShadow: "0 0 20px #9333ea",
+          color: "#c084fc",
+          textShadow: "0 0 25px #9333ea",
         }}
       >
         Pi Social Hub 🚀
       </div>
 
-      {/* Menu */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-around",
-          padding: "15px",
-          background: "#09090b",
-          borderTop: "1px solid #27272a",
-          borderBottom: "1px solid #27272a",
-        }}
-      >
-        <span>Akhilesh</span>
-        <span>Pi News</span>
-        <span>Crypto</span>
-        <span>Mainnet</span>
-        <span>Community</span>
-      </div>
-
-      {/* Create Post Popup */}
-      {showPostBox && (
-        <div
-          style={{
-            position: "fixed",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "90%",
-            maxWidth: "500px",
-            background: "#18181b",
-            padding: "25px",
-            borderRadius: "20px",
-            zIndex: 999,
-            border: "1px solid #9333ea",
-            boxShadow: "0 0 30px #9333ea",
-          }}
-        >
-          <h2>Create New Post</h2>
-
-          <textarea
-            placeholder="Write something..."
-            value={postText}
-            onChange={(e) => setPostText(e.target.value)}
-            style={{
-              width: "100%",
-              height: "100px",
-              marginTop: "15px",
-              padding: "15px",
-              borderRadius: "12px",
-              border: "none",
-              background: "#27272a",
-              color: "white",
-            }}
-          />
-
-          <input
-             type="file"
-             accept="image/*,video/*"
-             onChange={(e) => {
-              const file = e.target.files?.[0];
-
-              if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setImageUrl(imageUrl);
-    }
-  }}
-  style={{
-    width: "100%",
-    padding: "12px",
-    borderRadius: "10px",
-    background: "#222",
-    color: "white",
-    border: "1px solid #9333ea",
-    marginTop: "10px",
-  }}
-/>
-           
-
-          <button
-            onClick={createPost}
-            style={{
-              marginTop: "20px",
-              width: "100%",
-              padding: "15px",
-              border: "none",
-              borderRadius: "12px",
-              background:
-                "linear-gradient(to right, #9333ea, #7e22ce)",
-              color: "white",
-              fontSize: "18px",
-              cursor: "pointer",
-            }}
-          >
-            🚀 Post Now
-          </button>
-        </div>
-      )}
-
-      {/* Posts */}
+      {/* Feed */}
       {posts.map((post, index) => (
         <div
           key={index}
           style={{
-            margin: "30px auto",
-            width: "95%",
-            background: "#1e1e2f",
+            background: "#1e1e35",
+            margin: "20px",
             borderRadius: "25px",
             overflow: "hidden",
-            border: "1px solid #7e22ce",
-            boxShadow: "0 0 25px rgba(168,85,247,0.4)",
+            border: "1px solid #9333ea",
+            boxShadow: "0 0 20px rgba(147,51,234,0.5)",
           }}
         >
-          {/* User */}
+          {/* Profile */}
           <div
             style={{
               display: "flex",
@@ -182,13 +84,13 @@ type: "image",
           >
             <div
               style={{
-                width: "55px",
-                height: "55px",
+                width: "60px",
+                height: "60px",
                 borderRadius: "50%",
                 background:
-                  "linear-gradient(to bottom, #9333ea, #4c1d95)",
+                  "linear-gradient(to bottom, #9333ea, #6b21a8)",
               }}
-            ></div>
+            />
 
             <div style={{ marginLeft: "15px" }}>
               <h2 style={{ margin: 0 }}>Akhilesh</h2>
@@ -204,28 +106,28 @@ type: "image",
             </div>
           </div>
 
-          {/* Image */}
-         {post.type === "video" ? (
-  <video
-    src={post.media}
-    controls
-    style={{
-      width: "100%",
-      height: "500px",
-      objectFit: "cover",
-    }}
-  />
-) : (
-  <img
-    src={post.media}
-    alt="post"
-    style={{
-      width: "100%",
-      height: "500px",
-      objectFit: "cover",
-    }}
-  />
-)}
+          {/* Media */}
+          {post.type === "video" ? (
+            <video
+              src={post.media}
+              controls
+              style={{
+                width: "100%",
+                height: "500px",
+                objectFit: "cover",
+              }}
+            />
+          ) : (
+            <img
+              src={post.media}
+              alt="post"
+              style={{
+                width: "100%",
+                height: "500px",
+                objectFit: "cover",
+              }}
+            />
+          )}
 
           {/* Caption */}
           <div style={{ padding: "25px" }}>
@@ -242,13 +144,14 @@ type: "image",
               <button
                 onClick={() => setLikes(likes + 1)}
                 style={{
-                  background: "#4c1d95",
-                  color: "white",
+                  background:
+                    "linear-gradient(to right, #7e22ce, #9333ea)",
                   border: "none",
-                  padding: "14px 25px",
+                  padding: "15px 30px",
                   borderRadius: "15px",
-                  cursor: "pointer",
+                  color: "white",
                   fontSize: "18px",
+                  cursor: "pointer",
                 }}
               >
                 ❤️ {likes} Likes
@@ -256,12 +159,12 @@ type: "image",
 
               <button
                 style={{
-                  background: "#4c1d95",
-                  color: "white",
+                  background:
+                    "linear-gradient(to right, #7e22ce, #9333ea)",
                   border: "none",
-                  padding: "14px 25px",
+                  padding: "15px 30px",
                   borderRadius: "15px",
-                  cursor: "pointer",
+                  color: "white",
                   fontSize: "18px",
                 }}
               >
@@ -270,12 +173,12 @@ type: "image",
 
               <button
                 style={{
-                  background: "#4c1d95",
-                  color: "white",
+                  background:
+                    "linear-gradient(to right, #7e22ce, #9333ea)",
                   border: "none",
-                  padding: "14px 25px",
+                  padding: "15px 30px",
                   borderRadius: "15px",
-                  cursor: "pointer",
+                  color: "white",
                   fontSize: "18px",
                 }}
               >
@@ -291,42 +194,113 @@ type: "image",
         onClick={() => setShowPostBox(true)}
         style={{
           position: "fixed",
-          bottom: "100px",
-          right: "25px",
-          width: "75px",
-          height: "75px",
+          right: "30px",
+          bottom: "30px",
+          width: "80px",
+          height: "80px",
           borderRadius: "50%",
           border: "none",
           background:
-            "linear-gradient(to bottom, #9333ea, #4c1d95)",
+            "linear-gradient(to bottom, #9333ea, #6b21a8)",
           color: "white",
           fontSize: "40px",
           cursor: "pointer",
-          boxShadow: "0 0 25px #9333ea",
+          boxShadow: "0 0 30px #9333ea",
         }}
       >
         +
       </button>
 
-      {/* Bottom Navbar */}
-      <div
-        style={{
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          background: "#050505",
-          display: "flex",
-          justifyContent: "space-around",
-          padding: "20px",
-          borderTop: "1px solid #27272a",
-        }}
-      >
-        <span style={{ fontSize: "32px" }}>🏠</span>
-        <span style={{ fontSize: "32px" }}>🔍</span>
-        <span style={{ fontSize: "32px" }}>🔔</span>
-        <span style={{ fontSize: "32px" }}>👤</span>
-      </div>
+      {/* Post Popup */}
+      {showPostBox && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            background: "rgba(0,0,0,0.7)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div
+            style={{
+              width: "500px",
+              background: "#111",
+              padding: "30px",
+              borderRadius: "25px",
+              border: "1px solid #9333ea",
+              boxShadow: "0 0 25px #9333ea",
+            }}
+          >
+            <h2>Create New Post</h2>
+
+            <textarea
+              placeholder="Write something..."
+              value={postText}
+              onChange={(e) => setPostText(e.target.value)}
+              style={{
+                width: "100%",
+                height: "120px",
+                padding: "15px",
+                borderRadius: "15px",
+                background: "#222",
+                color: "white",
+                border: "none",
+                marginTop: "15px",
+              }}
+            />
+
+            <input
+              type="file"
+              accept="image/*,video/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+
+                if (file) {
+                  const fileUrl =
+                    URL.createObjectURL(file);
+
+                  setImageUrl(fileUrl);
+
+                  if (
+                    file.type.startsWith("video")
+                  ) {
+                    setMediaType("video");
+                  } else {
+                    setMediaType("image");
+                  }
+                }
+              }}
+              style={{
+                marginTop: "20px",
+                color: "white",
+              }}
+            />
+
+            <button
+              onClick={createPost}
+              style={{
+                width: "100%",
+                marginTop: "25px",
+                padding: "18px",
+                borderRadius: "15px",
+                border: "none",
+                background:
+                  "linear-gradient(to right, #7e22ce, #9333ea)",
+                color: "white",
+                fontSize: "20px",
+                cursor: "pointer",
+              }}
+            >
+              🚀 Post Now
+            </button>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
