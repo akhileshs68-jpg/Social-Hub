@@ -1,170 +1,247 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function HomePage() {
-  const [likes, setLikes] = useState(1);
-
-  const [posts, setPosts] = useState([
-    {
-      text: "Welcome to Pi Social Hub 🚀",
-      media:
-        "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop",
-      type: "image",
-    },
-  ]);
-
-  const [showPostBox, setShowPostBox] = useState(false);
+  const [posts, setPosts] = useState<any[]>([]);
   const [postText, setPostText] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const [mediaUrl, setMediaUrl] = useState("");
   const [mediaType, setMediaType] = useState("image");
+  const [showPostBox, setShowPostBox] = useState(false);
 
-  const createPost = () => {
-    if (!postText || !imageUrl) return;
+  // LOAD POSTS
+  useEffect(() => {
+    const savedPosts = localStorage.getItem("social_posts");
+
+    if (savedPosts) {
+      setPosts(JSON.parse(savedPosts));
+    }
+  }, []);
+
+  // SAVE POSTS
+  useEffect(() => {
+    localStorage.setItem("social_posts", JSON.stringify(posts));
+  }, [posts]);
+
+  // UPLOAD IMAGE / VIDEO
+  const uploadMedia = async (file: any) => {
+    const formData = new FormData();
+
+    formData.append("file", file);
+    formData.append("upload_preset", "socialhub");
+
+    const cloudName =
+      process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+
+    const res = await fetch(
+      `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    const data = await res.json();
+
+    return data.secure_url;
+  };
+
+  // CREATE POST
+  const createPost = async () => {
+    if (!postText || !mediaUrl) return;
 
     const newPost = {
+      id: Date.now(),
       text: postText,
-      media: imageUrl,
+      media: mediaUrl,
       type: mediaType,
+      likes: 0,
+      comments: [],
     };
 
-    setPosts((prev) => [newPost, ...prev]);
+    const updatedPosts = [newPost, ...posts];
+
+    setPosts(updatedPosts);
 
     setPostText("");
-    setImageUrl("");
-    setMediaType("image");
+    setMediaUrl("");
     setShowPostBox(false);
+  };
+
+  // LIKE
+  const likePost = (id: number) => {
+    const updated = posts.map((post) =>
+      post.id === id
+        ? { ...post, likes: post.likes + 1 }
+        : post
+    );
+
+    setPosts(updated);
+  };
+
+  // COMMENT
+  const commentPost = (id: number) => {
+    const text = prompt("Write comment");
+
+    if (!text) return;
+
+    const updated = posts.map((post) =>
+      post.id === id
+        ? {
+            ...post,
+            comments: [...post.comments, text],
+          }
+        : post
+    );
+
+    setPosts(updated);
+  };
+
+  // SHARE
+  const sharePost = async (post: any) => {
+    await navigator.share({
+      title: "Pi Social Hub",
+      text: post.text,
+      url: window.location.href,
+    });
   };
 
   return (
     <main
       style={{
         background:
-          "linear-gradient(to bottom, #050505, #111827, #1e1b4b)",
+          "linear-gradient(to bottom,#050505,#111827,#1e1b4b)",
         minHeight: "100vh",
-        color: "white",
-        paddingBottom: "100px",
-        fontFamily: "Arial",
+        paddingBottom: "120px",
       }}
     >
-      {/* Header */}
+      {/* POSTS */}
       <div
         style={{
-          textAlign: "center",
-          padding: "25px",
-          fontSize: "45px",
-          fontWeight: "bold",
-          color: "#c084fc",
-          textShadow: "0 0 25px #9333ea",
+          maxWidth: "900px",
+          margin: "auto",
+          padding: "20px",
         }}
       >
-        Pi Social Hub 🚀
-      </div>
-
-      {/* Feed */}
-      {posts.map((post, index) => (
-        <div
-          key={index}
-          style={{
-            background: "#1e1e35",
-            margin: "20px",
-            borderRadius: "25px",
-            overflow: "hidden",
-            border: "1px solid #9333ea",
-            boxShadow: "0 0 20px rgba(147,51,234,0.5)",
-          }}
-        >
-          {/* Profile */}
+        {posts.map((post) => (
           <div
+            key={post.id}
             style={{
-              display: "flex",
-              alignItems: "center",
-              padding: "20px",
+              background: "#111827",
+              borderRadius: "20px",
+              overflow: "hidden",
+              marginBottom: "30px",
+              border: "1px solid #9333ea",
+              boxShadow: "0 0 20px #7e22ce",
             }}
           >
+            {/* HEADER */}
             <div
               style={{
-                width: "60px",
-                height: "60px",
-                borderRadius: "50%",
-                background:
-                  "linear-gradient(to bottom, #9333ea, #6b21a8)",
+                display: "flex",
+                alignItems: "center",
+                padding: "20px",
+                gap: "15px",
               }}
-            />
+            >
+              <div
+                style={{
+                  width: "60px",
+                  height: "60px",
+                  borderRadius: "50%",
+                  background:
+                    "linear-gradient(to bottom,#9333ea,#4c1d95)",
+                }}
+              />
 
-            <div style={{ marginLeft: "15px" }}>
-              <h2 style={{ margin: 0 }}>Akhilesh</h2>
+              <div>
+                <h2
+                  style={{
+                    margin: 0,
+                    color: "white",
+                  }}
+                >
+                  Akhilesh
+                </h2>
 
+                <p
+                  style={{
+                    margin: 0,
+                    color: "#c4b5fd",
+                  }}
+                >
+                  Pi Pioneer • now
+                </p>
+              </div>
+            </div>
+
+            {/* MEDIA */}
+            {post.type === "video" ? (
+              <video
+                src={post.media}
+                controls
+                style={{
+                  width: "100%",
+                  height: "500px",
+                  objectFit: "cover",
+                }}
+              />
+            ) : (
+              <img
+                src={post.media}
+                alt="post"
+                style={{
+                  width: "100%",
+                  height: "500px",
+                  objectFit: "cover",
+                }}
+              />
+            )}
+
+            {/* TEXT */}
+            <div style={{ padding: "25px" }}>
               <p
                 style={{
-                  margin: 0,
-                  color: "#c4b5fd",
+                  color: "white",
+                  fontSize: "22px",
                 }}
               >
-                Pi Pioneer • now
+                {post.text}
               </p>
             </div>
-          </div>
 
-          {/* Media */}
-          {post.type === "video" ? (
-            <video
-              src={post.media}
-              controls
-              style={{
-                width: "100%",
-                height: "500px",
-                objectFit: "cover",
-              }}
-            />
-          ) : (
-            <img
-              src={post.media}
-              alt="post"
-              style={{
-                width: "100%",
-                height: "500px",
-                objectFit: "cover",
-              }}
-            />
-          )}
-
-          {/* Caption */}
-          <div style={{ padding: "25px" }}>
-            <p style={{ fontSize: "22px" }}>{post.text}</p>
-
-            {/* Buttons */}
+            {/* BUTTONS */}
             <div
               style={{
                 display: "flex",
                 justifyContent: "space-around",
-                marginTop: "25px",
+                paddingBottom: "25px",
               }}
             >
               <button
-                onClick={() => setLikes(likes + 1)}
+                onClick={() => likePost(post.id)}
                 style={{
-                  background:
-                    "linear-gradient(to right, #7e22ce, #9333ea)",
-                  border: "none",
-                  padding: "15px 30px",
-                  borderRadius: "15px",
+                  background: "#6d28d9",
                   color: "white",
-                  fontSize: "18px",
+                  border: "none",
+                  padding: "15px 25px",
+                  borderRadius: "15px",
                   cursor: "pointer",
+                  fontSize: "18px",
                 }}
               >
-                ❤️ {likes} Likes
+                ❤️ {post.likes} Likes
               </button>
 
               <button
+                onClick={() => commentPost(post.id)}
                 style={{
-                  background:
-                    "linear-gradient(to right, #7e22ce, #9333ea)",
-                  border: "none",
-                  padding: "15px 30px",
-                  borderRadius: "15px",
+                  background: "#6d28d9",
                   color: "white",
+                  border: "none",
+                  padding: "15px 25px",
+                  borderRadius: "15px",
+                  cursor: "pointer",
                   fontSize: "18px",
                 }}
               >
@@ -172,58 +249,55 @@ export default function HomePage() {
               </button>
 
               <button
+                onClick={() => sharePost(post)}
                 style={{
-                  background:
-                    "linear-gradient(to right, #7e22ce, #9333ea)",
-                  border: "none",
-                  padding: "15px 30px",
-                  borderRadius: "15px",
+                  background: "#6d28d9",
                   color: "white",
+                  border: "none",
+                  padding: "15px 25px",
+                  borderRadius: "15px",
+                  cursor: "pointer",
                   fontSize: "18px",
                 }}
               >
                 📤 Share
               </button>
             </div>
+
+            {/* COMMENTS */}
+            <div style={{ padding: "20px" }}>
+              {post.comments.map(
+                (comment: string, index: number) => (
+                  <div
+                    key={index}
+                    style={{
+                      background: "#1f2937",
+                      padding: "12px",
+                      borderRadius: "10px",
+                      color: "white",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    {comment}
+                  </div>
+                )
+              )}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
 
-      {/* Floating Button */}
-      <button
-        onClick={() => setShowPostBox(true)}
-        style={{
-          position: "fixed",
-          right: "30px",
-          bottom: "30px",
-          width: "80px",
-          height: "80px",
-          borderRadius: "50%",
-          border: "none",
-          background:
-            "linear-gradient(to bottom, #9333ea, #6b21a8)",
-          color: "white",
-          fontSize: "40px",
-          cursor: "pointer",
-          boxShadow: "0 0 30px #9333ea",
-        }}
-      >
-        +
-      </button>
-
-      {/* Post Popup */}
+      {/* CREATE POST BOX */}
       {showPostBox && (
         <div
           style={{
             position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
+            inset: 0,
             background: "rgba(0,0,0,0.7)",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            zIndex: 100,
           }}
         >
           <div
@@ -231,51 +305,52 @@ export default function HomePage() {
               width: "500px",
               background: "#111",
               padding: "30px",
-              borderRadius: "25px",
-              border: "1px solid #9333ea",
-              boxShadow: "0 0 25px #9333ea",
+              borderRadius: "20px",
+              boxShadow: "0 0 30px #9333ea",
             }}
           >
-            <h2>Create New Post</h2>
+            <h1 style={{ color: "white" }}>
+              Create New Post
+            </h1>
 
             <textarea
               placeholder="Write something..."
               value={postText}
-              onChange={(e) => setPostText(e.target.value)}
+              onChange={(e) =>
+                setPostText(e.target.value)
+              }
               style={{
                 width: "100%",
                 height: "120px",
-                padding: "15px",
-                borderRadius: "15px",
                 background: "#222",
                 color: "white",
                 border: "none",
-                marginTop: "15px",
+                padding: "15px",
+                borderRadius: "10px",
               }}
             />
 
             <input
               type="file"
               accept="image/*,video/*"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
+              onChange={async (e: any) => {
+                const file = e.target.files[0];
 
-                if (file) {
-                  const fileUrl =
-                    URL.createObjectURL(file);
+                if (!file) return;
 
-                  setImageUrl(fileUrl);
-
-                  if (
-                    file.type.startsWith("video")
-                  ) {
-                    setMediaType("video");
-                  } else {
-                    setMediaType("image");
-                  }
+                if (file.type.startsWith("video")) {
+                  setMediaType("video");
+                } else {
+                  setMediaType("image");
                 }
+
+                const uploaded =
+                  await uploadMedia(file);
+
+                setMediaUrl(uploaded);
               }}
               style={{
+                width: "100%",
                 marginTop: "20px",
                 color: "white",
               }}
@@ -290,7 +365,7 @@ export default function HomePage() {
                 borderRadius: "15px",
                 border: "none",
                 background:
-                  "linear-gradient(to right, #7e22ce, #9333ea)",
+                  "linear-gradient(to right,#7e22ce,#9333ea)",
                 color: "white",
                 fontSize: "20px",
                 cursor: "pointer",
@@ -301,6 +376,28 @@ export default function HomePage() {
           </div>
         </div>
       )}
+
+      {/* FLOAT BUTTON */}
+      <button
+        onClick={() => setShowPostBox(true)}
+        style={{
+          position: "fixed",
+          bottom: "40px",
+          right: "40px",
+          width: "90px",
+          height: "90px",
+          borderRadius: "50%",
+          border: "none",
+          background:
+            "linear-gradient(to bottom,#9333ea,#6d28d9)",
+          color: "white",
+          fontSize: "50px",
+          cursor: "pointer",
+          boxShadow: "0 0 30px #9333ea",
+        }}
+      >
+        +
+      </button>
     </main>
   );
 }
