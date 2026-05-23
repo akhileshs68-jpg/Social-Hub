@@ -112,19 +112,27 @@ export default function HomePage() {
           />
 
           <input
-            placeholder="Paste image URL..."
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-            style={{
-              width: "100%",
-              marginTop: "15px",
-              padding: "15px",
-              borderRadius: "12px",
-              border: "none",
-              background: "#27272a",
-              color: "white",
-            }}
-          />
+             type="file"
+             accept="image/*,video/*"
+             onChange={(e) => {
+              const file = e.target.files?.[0];
+
+              if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setImageUrl(imageUrl);
+    }
+  }}
+  style={{
+    width: "100%",
+    padding: "12px",
+    borderRadius: "10px",
+    background: "#222",
+    color: "white",
+    border: "1px solid #9333ea",
+    marginTop: "10px",
+  }}
+/>
+           
 
           <button
             onClick={createPost}
