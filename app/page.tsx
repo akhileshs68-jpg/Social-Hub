@@ -8,22 +8,25 @@ export default function HomePage() {
   const [posts, setPosts] = useState([
     {
       text: "Welcome to Pi Social Hub 🚀",
-      image:
-        "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop",
+media:
+  "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop",
+type: "image",
     },
   ]);
 
   const [showPostBox, setShowPostBox] = useState(false);
   const [postText, setPostText] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [mediaType, setMediaType] = useState("image");
 
   const createPost = () => {
     if (!postText || !imageUrl) return;
 
     const newPost = {
-      text: postText,
-      image: imageUrl,
-    };
+  text: postText,
+  media: imageUrl,
+  type: mediaType,
+};
 
     setPosts([newPost, ...posts]);
 
@@ -201,9 +204,9 @@ export default function HomePage() {
           </div>
 
           {/* Image */}
-          {post.image?.startsWith("blob:") ? (
+         {post.type === "video" ? (
   <video
-    src={post.image}
+    src={post.media}
     controls
     style={{
       width: "100%",
@@ -213,7 +216,7 @@ export default function HomePage() {
   />
 ) : (
   <img
-    src={post.image}
+    src={post.media}
     alt="post"
     style={{
       width: "100%",
