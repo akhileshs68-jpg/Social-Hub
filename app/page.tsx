@@ -201,15 +201,27 @@ export default function HomePage() {
           </div>
 
           {/* Image */}
-          <img
-            src={post.image}
-            alt="post"
-            style={{
-              width: "100%",
-              height: "500px",
-              objectFit: "cover",
-            }}
-          />
+          {post.image?.startsWith("blob:") ? (
+  <video
+    src={post.image}
+    controls
+    style={{
+      width: "100%",
+      height: "500px",
+      objectFit: "cover",
+    }}
+  />
+) : (
+  <img
+    src={post.image}
+    alt="post"
+    style={{
+      width: "100%",
+      height: "500px",
+      objectFit: "cover",
+    }}
+  />
+)}
 
           {/* Caption */}
           <div style={{ padding: "25px" }}>
