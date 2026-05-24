@@ -1,81 +1,168 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { ref, onValue, set } from "firebase/database"
-import { database } from "../../lib/firebase"
+
+import {
+  onAuthStateChanged,
+  signOut
+} from "firebase/auth"
+
+import {
+  ref,
+  onValue,
+  update,
+  push
+} from "firebase/database"
+
+import {
+  auth,
+  database
+} from "../../lib/firebase"
 
 export default function ProfilePage() {
 
-  const [profile, setProfile] = useState({
-    name: "Akhilesh Singh",
-    bio: "Pi Network Social User 🚀",
-    avatar: "",
-    followers: 100,
-    following: 50
-  })
+  // USER
+  const [user, setUser] =
+    useState<any>(null)
 
-  const [posts, setPosts] = useState<any[]>([])
+  // POSTS
+  const [posts, setPosts] =
+    useState<any[]>([])
 
-  // Load Profile Realtime
+  // PROFILE
+  const [bio, setBio] =
+    useState(
+      "Pi Network Social User 🚀"
+    )
+
+  const [profileImage, setProfileImage] =
+    useState(
+      "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+    )
+
+  // FOLLOW
+  const [followers, setFollowers] =
+    useState(0)
+
+  const [following, setFollowing] =
+    useState(0)
+
+  const [isFollowing, setIsFollowing] =
+    useState(false)
+
+  // AUTH
   useEffect(() => {
 
-    const profileRef = ref(database, "profile")
+    const unsubscribe =
+      onAuthStateChanged(
+        auth,
+        (currentUser) => {
 
-    onValue(profileRef, (snapshot) => {
+          if (currentUser) {
 
-      const data = snapshot.val()
+            setUser(currentUser)
 
-      if (data) {
-        setProfile(data)
-      }
+          } else {
 
-    })
+            window.location.href =
+              "/login"
+
+          }
+
+        }
+      )
+
+    return () => unsubscribe()
 
   }, [])
 
-  // Load Posts Realtime
+  // POSTS
   useEffect(() => {
 
-    const postsRef = ref(database, "posts")
+    const postsRef =
+      ref(database, "posts")
 
-    onValue(postsRef, (snapshot) => {
+    onValue(
+      postsRef,
+      (snapshot) => {
 
-      const data = snapshot.val()
+        const data =
+          snapshot.val()
 
-      if (data) {
+        if (data) {
 
-        const postsArray = Object.keys(data).map((key) => ({
-          firebaseId: key,
-          ...data[key]
-        }))
+          const postsArray =
+            Object.keys(data).map(
+              (key) => ({
+                firebaseId: key,
+                ...data[key]
+              })
+            )
 
-        setPosts(postsArray.reverse())
+          setPosts(
+            postsArray.reverse()
+          )
 
-      } else {
+        } else {
 
-        setPosts([])
+          setPosts([])
+
+        }
 
       }
-
-    })
+    )
 
   }, [])
 
-  // Upload Avatar
-  const handleImage = (e: any) => {
+  // FOLLOWERS
+  useEffect(() => {
 
-    const file = e.target.files[0]
+    const followersRef =
+      ref(database, "followers")
+
+    onValue(
+      followersRef,
+      (snapshot) => {
+
+        const data =
+          snapshot.val()
+
+        if (data) {
+
+          const total =
+            Object.keys(data).length
+
+          setFollowers(total)
+
+        } else {
+
+          setFollowers(0)
+
+        }
+
+      }
+    )
+
+  }, [])
+
+  // IMAGE
+  const handleImage = (
+    e: any
+  ) => {
+
+    const file =
+      e.target.files[0]
 
     if (!file) return
 
-    const reader = new FileReader()
+    const reader =
+      new FileReader()
 
     reader.onloadend = () => {
 
-      setProfile({
-        ...profile,
-        avatar: reader.result as string
-      })
+      setProfileImage(
+        reader.result as string
+      )
 
     }
 
@@ -83,14 +170,85 @@ export default function ProfilePage() {
 
   }
 
-  // Save Profile
-  const saveProfile = async () => {
+  // EDIT BIO
+  const editProfile = () => {
 
-    await set(ref(database, "profile"), profile)
+    const newBio =
+      prompt("Enter Bio")
 
-    alert("Profile Saved Successfully")
+    if (newBio) {
+
+      setBio(newBio)
+
+    }
 
   }
+
+  // FOLLOW
+  const followUser =
+    async () => {
+
+      const currentUser =
+        auth.currentUser
+
+      if (!currentUser) return
+
+      if (!isFollowing) {
+
+        await push(
+          ref(
+            database,
+            "followers"
+          ),
+          {
+
+            username:
+              currentUser.displayName,
+
+            email:
+              currentUser.email
+
+          }
+        )
+
+        setFollowers(
+          followers + 1
+        )
+
+        setFollowing(
+          following + 1
+        )
+
+        setIsFollowing(true)
+
+      } else {
+
+        setFollowers(
+          followers - 1
+        )
+
+        setFollowing(
+          following - 1
+        )
+
+        setIsFollowing(false)
+
+      }
+
+    }
+
+  // LOGOUT
+  const logout =
+    async () => {
+
+      await signOut(auth)
+
+      alert("Logged Out")
+
+      window.location.href =
+        "/login"
+
+    }
 
   return (
 
@@ -99,11 +257,11 @@ export default function ProfilePage() {
         background: "#000",
         minHeight: "100vh",
         color: "white",
-        paddingBottom: "100px"
+        paddingBottom: "120px"
       }}
     >
 
-      {/* PROFILE CARD */}
+      {/* PROFILE */}
       <div
         style={{
           width: "92%",
@@ -111,8 +269,7 @@ export default function ProfilePage() {
           margin: "20px auto",
           background: "#111",
           borderRadius: "25px",
-          padding: "25px",
-          boxShadow: "0 0 25px rgba(255,0,255,0.2)"
+          padding: "25px"
         }}
       >
 
@@ -120,81 +277,53 @@ export default function ProfilePage() {
         <div
           style={{
             display: "flex",
-            gap: "20px",
             alignItems: "center",
+            gap: "20px",
             flexWrap: "wrap"
           }}
         >
 
-          {/* PROFILE IMAGE */}
+          {/* IMAGE */}
+          <img
+            src={profileImage}
+            style={{
+              width: "120px",
+              height: "120px",
+              borderRadius: "50%",
+              objectFit: "cover",
+              border:
+                "4px solid #ff00ff"
+            }}
+          />
+
+          {/* INFO */}
           <div>
 
-            <img
-              src={
-                profile.avatar ||
-                "https://cdn-icons-png.flaticon.com/512/149/149071.png"
-              }
+            <h1
               style={{
-                width: "120px",
-                height: "120px",
-                borderRadius: "50%",
-                objectFit: "cover",
-                border: "4px solid #ff00ff"
-              }}
-            />
-
-          </div>
-
-          {/* USER INFO */}
-          <div
-            style={{
-              flex: 1
-            }}
-          >
-
-            <input
-              value={profile.name}
-              onChange={(e) =>
-                setProfile({
-                  ...profile,
-                  name: e.target.value
-                })
-              }
-              placeholder="Enter Name"
-              style={{
-                width: "100%",
-                background: "#1a1a1a",
-                color: "white",
-                border: "1px solid #333",
-                borderRadius: "10px",
-                padding: "12px",
-                fontSize: "30px",
-                fontWeight: "bold",
+                fontSize: "42px",
                 marginBottom: "10px"
               }}
-            />
+            >
+              {user?.displayName}
+            </h1>
 
-            <textarea
-              value={profile.bio}
-              onChange={(e) =>
-                setProfile({
-                  ...profile,
-                  bio: e.target.value
-                })
-              }
-              placeholder="Enter Bio"
+            <p
               style={{
-                width: "100%",
-                height: "90px",
-                background: "#1a1a1a",
-                color: "white",
-                border: "1px solid #333",
-                borderRadius: "10px",
-                padding: "12px",
-                fontSize: "16px",
-                resize: "none"
+                color: "#ccc",
+                marginBottom: "10px"
               }}
-            />
+            >
+              {bio}
+            </p>
+
+            <p
+              style={{
+                color: "#ff00ff"
+              }}
+            >
+              {user?.email}
+            </p>
 
           </div>
 
@@ -204,68 +333,125 @@ export default function ProfilePage() {
         <div
           style={{
             display: "flex",
-            justifyContent: "space-around",
-            marginTop: "35px",
+            justifyContent:
+              "space-around",
+            marginTop: "40px",
             textAlign: "center"
           }}
         >
 
           <div>
-            <h1>{posts.length}</h1>
+
+            <h1>
+              {posts.length}
+            </h1>
+
             <p>Posts</p>
+
           </div>
 
           <div>
-            <h1>{profile.followers}</h1>
+
+            <h1>
+              {followers}
+            </h1>
+
             <p>Followers</p>
+
           </div>
 
           <div>
-            <h1>{profile.following}</h1>
+
+            <h1>
+              {following}
+            </h1>
+
             <p>Following</p>
+
           </div>
 
         </div>
 
-        {/* IMAGE INPUT */}
+        {/* INPUT */}
+        <input
+          type="file"
+          onChange={handleImage}
+          style={{
+            marginTop: "25px",
+            marginBottom: "20px"
+          }}
+        />
+
+        {/* BUTTONS */}
         <div
           style={{
-            marginTop: "25px"
+            display: "flex",
+            gap: "15px",
+            marginTop: "10px"
           }}
         >
 
-          <input
-            type="file"
-            onChange={handleImage}
+          {/* EDIT */}
+          <button
+            onClick={editProfile}
             style={{
-              color: "white"
+              flex: 1,
+              padding: "15px",
+              borderRadius: "12px",
+              border: "none",
+              background: "#ff00ff",
+              color: "white",
+              fontWeight: "bold",
+              cursor: "pointer"
             }}
-          />
+          >
+            Edit Profile
+          </button>
+
+          {/* FOLLOW */}
+          <button
+            onClick={followUser}
+            style={{
+              flex: 1,
+              padding: "15px",
+              borderRadius: "12px",
+              border: "none",
+              background:
+                isFollowing
+                  ? "#333"
+                  : "#00bfff",
+              color: "white",
+              fontWeight: "bold",
+              cursor: "pointer"
+            }}
+          >
+            {isFollowing
+              ? "Following"
+              : "Follow"}
+          </button>
+
+          {/* LOGOUT */}
+          <button
+            onClick={logout}
+            style={{
+              flex: 1,
+              padding: "15px",
+              borderRadius: "12px",
+              border: "none",
+              background: "#222",
+              color: "white",
+              fontWeight: "bold",
+              cursor: "pointer"
+            }}
+          >
+            Logout
+          </button>
 
         </div>
-
-        {/* SAVE BUTTON */}
-        <button
-          onClick={saveProfile}
-          style={{
-            width: "100%",
-            marginTop: "20px",
-            padding: "15px",
-            background: "linear-gradient(90deg,#ff00ff,#9900ff)",
-            border: "none",
-            borderRadius: "12px",
-            color: "white",
-            fontSize: "18px",
-            fontWeight: "bold",
-            cursor: "pointer"
-          }}
-        >
-          Save Profile
-        </button>
 
       </div>
 
-      {/* MY POSTS */}
+      {/* POSTS */}
       <div
         style={{
           width: "92%",
@@ -294,7 +480,13 @@ export default function ProfilePage() {
             }}
           >
 
-            <h3>{profile.name}</h3>
+            <h3
+              style={{
+                marginBottom: "10px"
+              }}
+            >
+              {post.username}
+            </h3>
 
             <p
               style={{
@@ -304,26 +496,30 @@ export default function ProfilePage() {
               {post.content}
             </p>
 
-            {post.mediaType === "image" && (
+            {post.mediaType ===
+              "image" && (
 
               <img
                 src={post.media}
                 style={{
                   width: "100%",
-                  borderRadius: "15px"
+                  borderRadius:
+                    "15px"
                 }}
               />
 
             )}
 
-            {post.mediaType === "video" && (
+            {post.mediaType ===
+              "video" && (
 
               <video
                 src={post.media}
                 controls
                 style={{
                   width: "100%",
-                  borderRadius: "15px"
+                  borderRadius:
+                    "15px"
                 }}
               />
 
@@ -335,7 +531,7 @@ export default function ProfilePage() {
 
       </div>
 
-      {/* BOTTOM NAVBAR */}
+      {/* NAVBAR */}
       <div
         style={{
           position: "fixed",
@@ -344,10 +540,11 @@ export default function ProfilePage() {
           width: "100%",
           background: "#111",
           display: "flex",
-          justifyContent: "space-around",
+          justifyContent:
+            "space-around",
           padding: "15px 0",
-          borderTop: "1px solid #333",
-          zIndex: 999
+          borderTop:
+            "1px solid #333"
         }}
       >
 
@@ -355,8 +552,8 @@ export default function ProfilePage() {
           href="/"
           style={{
             color: "white",
-            textDecoration: "none",
-            fontSize: "18px"
+            textDecoration:
+              "none"
           }}
         >
           🏠 Home
@@ -366,42 +563,43 @@ export default function ProfilePage() {
           href="/explore"
           style={{
             color: "white",
-            textDecoration: "none",
-            fontSize: "18px"
+            textDecoration:
+              "none"
           }}
         >
           🔍 Explore
         </a>
 
         <a
+          href="/reels"
+          style={{
+            color: "white",
+            textDecoration:
+              "none"
+          }}
+        >
+          🎬 Reels
+        </a>
+
+        <a
           href="/chat"
           style={{
             color: "white",
-            textDecoration: "none",
-            fontSize: "18px"
+            textDecoration:
+              "none"
           }}
         >
           💬 Chat
         </a>
 
         <a
-          href="/notifications"
-          style={{
-            color: "white",
-            textDecoration: "none",
-            fontSize: "18px"
-          }}
-        >
-          🔔 Notifications
-        </a>
-
-        <a
           href="/profile"
           style={{
             color: "#ff00ff",
-            textDecoration: "none",
-            fontSize: "18px",
-            fontWeight: "bold"
+            textDecoration:
+              "none",
+            fontWeight:
+              "bold"
           }}
         >
           👤 Profile

@@ -1,109 +1,216 @@
 "use client"
 
 import { useState } from "react"
-import { ref, push } from "firebase/database"
-import { database } from "../lib/firebase"
+
+import {
+  ref,
+  push
+} from "firebase/database"
+
+import {
+  auth,
+  database
+} from "../lib/firebase"
 
 export default function CreatePost() {
 
-  const [content, setContent] = useState("")
-  const [mediaPreview, setMediaPreview] = useState("")
-  const [mediaType, setMediaType] = useState("")
-  const [media, setMedia] = useState<any>(null)
+  const [content, setContent] =
+    useState("")
 
-  const handleFile = (e: any) => {
+  const [mediaPreview, setMediaPreview] =
+    useState("")
+
+  const [mediaType, setMediaType] =
+    useState("")
+
+  // FILE
+  const handleFile = (
+    e: any
+  ) => {
 
     const file = e.target.files[0]
 
     if (!file) return
 
-    setMedia(file)
-
     const reader = new FileReader()
 
     reader.onloadend = () => {
 
-      setMediaPreview(reader.result as string)
+      setMediaPreview(
+        reader.result as string
+      )
 
-      if (file.type.startsWith("video")) {
-        setMediaType("video")
-      } else {
-        setMediaType("image")
-      }
     }
 
     reader.readAsDataURL(file)
-  }
 
-  const handlePost = async () => {
+    // TYPE
+    if (
+      file.type.startsWith("image")
+    ) {
 
-    const newPost = {
-      id: Date.now(),
-      content,
-      media: mediaPreview,
-      mediaType,
-      likes: 0,
-      comments: [],
-      shares: 0,
-      createdAt: new Date().toISOString(),
+      setMediaType("image")
+
+    } else {
+
+      setMediaType("video")
+
     }
 
-    await push(ref(database, "posts"), newPost)
+  }
+
+  // POST
+  const createPost = async () => {
+
+    if (
+      !content &&
+      !mediaPreview
+    ) {
+      return
+    }
+
+    const user = auth.currentUser
+
+    if (!user) {
+
+      alert("Login First")
+
+      return
+
+    }
+
+    await push(
+      ref(database, "posts"),
+      {
+
+        username:
+          user.displayName ||
+          "Pioneer",
+
+        email:
+          user.email,
+
+        content,
+
+        media:
+          mediaPreview,
+
+        mediaType,
+
+        likes: 0,
+
+        comments: 0,
+
+        shares: 0,
+
+        createdAt:
+          Date.now()
+
+      }
+    )
+
+    alert("Post Created")
 
     setContent("")
-    setMedia(null)
     setMediaPreview("")
     setMediaType("")
 
-    alert("Post Created")
   }
 
   return (
+
     <div
       style={{
         background: "#111",
         padding: "20px",
         borderRadius: "20px",
-        marginBottom: "20px",
-        color: "white",
+        marginBottom: "25px"
       }}
     >
 
+      {/* TEXTAREA */}
       <textarea
         value={content}
-        onChange={(e) => setContent(e.target.value)}
+        onChange={(e) =>
+          setContent(
+            e.target.value
+          )
+        }
         placeholder="What's on your mind?"
         style={{
           width: "100%",
-          height: "100px",
-          borderRadius: "10px",
-          padding: "10px",
-          marginBottom: "10px",
+          minHeight: "120px",
+          background: "#1a1a1a",
+          border: "1px solid #333",
+          borderRadius: "15px",
+          padding: "15px",
+          color: "white",
+          resize: "none",
+          marginBottom: "15px"
         }}
       />
 
+      {/* FILE */}
       <input
         type="file"
         onChange={handleFile}
+        style={{
+          marginBottom: "20px",
+          color: "white"
+        }}
       />
 
-      <br />
+      {/* IMAGE PREVIEW */}
+      {mediaType === "image" &&
+        mediaPreview && (
 
+          <img
+            src={mediaPreview}
+            style={{
+              width: "100%",
+              borderRadius: "15px",
+              marginBottom: "15px"
+            }}
+          />
+
+        )}
+
+      {/* VIDEO PREVIEW */}
+      {mediaType === "video" &&
+        mediaPreview && (
+
+          <video
+            src={mediaPreview}
+            controls
+            style={{
+              width: "100%",
+              borderRadius: "15px",
+              marginBottom: "15px"
+            }}
+          />
+
+        )}
+
+      {/* BUTTON */}
       <button
-        onClick={handlePost}
+        onClick={createPost}
         style={{
-          marginTop: "10px",
-          background: "purple",
-          color: "white",
-          padding: "10px 20px",
-          borderRadius: "10px",
+          width: "100%",
+          padding: "15px",
           border: "none",
+          borderRadius: "12px",
+          background: "#ff00ff",
+          color: "white",
+          fontWeight: "bold",
           cursor: "pointer",
+          fontSize: "16px"
         }}
       >
-        Post
+        Create Post
       </button>
 
     </div>
+
   )
+
 }
