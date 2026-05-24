@@ -1,7 +1,13 @@
-"use client";
+"use client"
+
+import { useRouter } from "next/navigation"
 
 export default function BottomNav() {
+
+  const router = useRouter()
+
   return (
+
     <div
       style={{
         position: "fixed",
@@ -14,63 +20,66 @@ export default function BottomNav() {
         justifyContent: "space-around",
         alignItems: "center",
         borderTop: "1px solid #333",
-        zIndex: 999,
+        zIndex: 99999,
+        pointerEvents: "auto"
       }}
     >
+
       <button
+        onClick={() => router.push("/")}
         style={{
           background: "none",
           border: "none",
           color: "white",
           fontSize: "16px",
+          cursor: "pointer"
         }}
       >
         🏠 Home
       </button>
 
       <button
+        onClick={() => router.push("/explore")}
         style={{
           background: "none",
           border: "none",
           color: "white",
           fontSize: "16px",
+          cursor: "pointer"
         }}
       >
         🔍 Explore
       </button>
 
       <button
+        onClick={() => router.push("/notifications")}
         style={{
           background: "none",
           border: "none",
           color: "white",
           fontSize: "16px",
-        }}
-      >
-        💬 Chat
-      </button>
-
-      <button
-        style={{
-          background: "none",
-          border: "none",
-          color: "white",
-          fontSize: "16px",
+          cursor: "pointer"
         }}
       >
         🔔 Notifications
       </button>
 
       <button
+        onClick={() => router.push("/profile")}
         style={{
           background: "none",
           border: "none",
-          color: "white",
+          color: "#ff00ff",
           fontSize: "16px",
+          fontWeight: "bold",
+          cursor: "pointer"
         }}
       >
         👤 Profile
       </button>
+
     </div>
-  );
+
+  )
+
 }
