@@ -1,85 +1,188 @@
-"use client"
+"use client";
 
-import { PostCard } from "@/components/post-card"
-import type { Post } from "@/lib/types"
+import { useEffect, useState } from "react";
 
-const MOCK_POSTS: Post[] = [
-  {
-    id: "1",
-    username: "cryptopinoneer",
-    avatar: "C",
-    timeAgo: "2h ago",
-    content:
-      "Just reached 100 Pi! This community is amazing. Can't wait to see what we build together on Social Hub Pi! #PiNetwork #Milestone #Crypto",
-    likes: 42,
-    comments: 8,
-    shares: 3,
-    isLiked: false,
-    imageUrl: "/placeholder.svg?height=400&width=600",
-    hashtags: ["PiNetwork", "Milestone", "Crypto"],
-    piUid: "user123",
-  },
-  {
-    id: "2",
-    username: "blockchain_dev",
-    avatar: "B",
-    timeAgo: "4h ago",
-    content:
-      "Working on a new dApp for the Pi Network ecosystem. Anyone interested in collaborating? Drop your ideas below! #dApp #Development #Web3",
-    likes: 128,
-    comments: 23,
-    shares: 12,
-    isLiked: true,
-    hashtags: ["dApp", "Development", "Web3"],
-    piUid: "user456",
-  },
-  {
-    id: "3",
-    username: "pi_enthusiast",
-    avatar: "P",
-    timeAgo: "6h ago",
-    content:
-      "The future of social media is decentralized. Proud to be part of this revolution with Pi Network! #Decentralized #SocialMedia",
-    likes: 89,
-    comments: 15,
-    shares: 7,
-    isLiked: false,
-    media: [
-      {
-        type: "image",
-        url: "/placeholder.svg?height=400&width=400",
-      },
-      {
-        type: "image",
-        url: "/placeholder.svg?height=400&width=400",
-      },
-    ],
-    hashtags: ["Decentralized", "SocialMedia"],
-    piUid: "user789",
-  },
-  {
-    id: "4",
-    username: "techsavvy",
-    avatar: "T",
-    timeAgo: "8h ago",
-    content:
-      "Quick tip for new Pioneers: Make sure to mine daily and engage with the community. Together we're stronger! #PiTips #Community",
-    likes: 203,
-    comments: 34,
-    shares: 18,
-    isLiked: true,
-    hashtags: ["PiTips", "Community"],
-    piUid: "user101",
-    isEdited: true,
-  },
-]
+export default function Feed() {
+  const [posts, setPosts] = useState<any[]>([]);
 
-export function Feed() {
+  useEffect(() => {
+    const savedPosts = localStorage.getItem("social_posts");
+
+    if (savedPosts) {
+      setPosts(JSON.parse(savedPosts));
+    }
+  }, []);
+
+  const likePost = (id: number) => {
+    const updated = posts.map((post) =>
+      post.id === id
+        ? { ...post, likes: post.likes + 1 }
+        : post
+    );
+
+    setPosts(updated);
+    localStorage.setItem(
+      "social_posts",
+      JSON.stringify(updated)
+    );
+  };
+
+  const commentPost = (id: number) => {
+    const text = prompt("Write comment");
+
+    if (!text) return;
+
+    const updated = posts.map((post) =>
+      post.id === id
+        ? {
+            ...post,
+            comments: [...post.comments, text],
+          }
+        : post
+    );
+
+    setPosts(updated);
+
+    localStorage.setItem(
+      "social_posts",
+      JSON.stringify(updated)
+    );
+  };
+
   return (
-    <div className="divide-y divide-border">
-      {MOCK_POSTS.map((post) => (
-        <PostCard key={post.id} {...post} />
+    <div
+      style={{
+        width: "100%",
+        maxWidth: "700px",
+        margin: "20px auto",
+      }}
+    >
+      {posts.map((post) => (
+        <div
+          key={post.id}
+          style={{
+            background: "#0d0d0d",
+            padding: "20px",
+            borderRadius: "20px",
+            marginBottom: "25px",
+            color: "white",
+            boxShadow: "0 0 20px rgba(128,0,255,0.2)",
+          }}
+        >
+          <h3>{post.text}</h3>
+
+          {/* IMAGE */}
+          {post.media &&
+            !post.media.includes(".mp4") && (
+              <img
+                src={post.media}
+                alt=""
+                style={{
+                  width: "100%",
+                  borderRadius: "15px",
+                  marginTop: "15px",
+                }}
+              />
+            )}
+
+          {/* VIDEO */}
+          {post.media &&
+            post.media.includes(".mp4") && (
+              <video
+                src={post.media}
+                controls
+                style={{
+                  width: "100%",
+                  borderRadius: "15px",
+                  marginTop: "15px",
+                }}
+              />
+            )}
+
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+              marginTop: "15px",
+            }}
+          >
+            <button
+              onClick={() => likePost(post.id)}
+              style={{
+                padding: "8px 14px",
+                borderRadius: "10px",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              ❤️ {post.likes}
+            </button>
+
+            <button
+              onClick={() =>
+                commentPost(post.id)
+              }
+              style={{
+                padding: "8px 14px",
+                borderRadius: "10px",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              💬 Comment
+            </button>
+
+            <button
+              onClick={async () => {
+                try {
+                  const postLink =
+                    window.location.href;
+
+                  await navigator.clipboard.writeText(
+                    postLink
+                  );
+
+                  alert("Post link copied!");
+                } catch (err) {
+                  alert(
+                    "Clipboard permission denied"
+                  );
+                }
+              }}
+              style={{
+                padding: "8px 14px",
+                borderRadius: "10px",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              📤 Share
+            </button>
+          </div>
+
+          {/* COMMENTS */}
+          <div style={{ marginTop: "15px" }}>
+            {post.comments?.map(
+              (
+                comment: string,
+                index: number
+              ) => (
+                <p
+                  key={index}
+                  style={{
+                    background: "#1a1a1a",
+                    padding: "8px",
+                    borderRadius: "8px",
+                    marginTop: "8px",
+                  }}
+                >
+                  💬 {comment}
+                </p>
+              )
+            )}
+          </div>
+        </div>
       ))}
     </div>
-  )
+  );
 }
