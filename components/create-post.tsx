@@ -1,355 +1,109 @@
 "use client"
 
-import type React from "react"
+import { useState } from "react"
+import { ref, push } from "firebase/database"
+import { database } from "../lib/firebase"
 
-import { useState, useRef } from "react"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { ImagePlus, Video, X, Loader2 } from "lucide-react"
-import { usePiAuth } from "@/contexts/pi-auth-context"
-import { useFeed } from "@/contexts/feed-context"
-import { validateImageFile, validateVideoFile, compressImage, extractHashtags, formatFileSize } from "@/lib/media-utils"
-import { useToast } from "@/hooks/use-toast"
-
-interface MediaPreview {
-  type: "image" | "video"
-  url: string
-  file: File
-}
-
-export function CreatePost() {
-  const { userProfile } = usePiAuth()
-  const { addPost } = useFeed()
-  const { toast } = useToast()
-  const username = userProfile?.username || "Pioneer"
+export default function CreatePost() {
 
   const [content, setContent] = useState("")
-  const [isExpanded, setIsExpanded] = useState(false)
-  const [media, setMedia] = useState<MediaPreview[]>([])
-  const [isUploading, setIsUploading] = useState(false)
+  const [mediaPreview, setMediaPreview] = useState("")
+  const [mediaType, setMediaType] = useState("")
+  const [media, setMedia] = useState<any>(null)
 
-  const imageInputRef = useRef<HTMLInputElement>(null)
-  const videoInputRef = useRef<HTMLInputElement>(null)
+  const handleFile = (e: any) => {
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
+    const file = e.target.files[0]
+
     if (!file) return
 
-    const validation = validateImageFile(file)
-    if (!validation.valid) {
-      toast({
-        title: "Invalid Image",
-        description: validation.error,
-        variant: "destructive",
-      })
-      return
-    }
+    setMedia(file)
 
-    setIsUploading(true)
-    try {
-<<<<<<< HEAD
-      const formData = new FormData()
-formData.append("file", file)
-formData.append("upload_preset", "ml_default")
-
-const response = await fetch(
-  "https://api.cloudinary.com/v1_1/dqcuvxmgj/image/upload",
-  {
-    method: "POST",
-    body: formData,
-  }
-)
-
-const data = await response.json()
-
-console.log(data)
-
-setMedia([
-  ...media,
-  {
-    type: "image",
-    url: data.secure_url,
-    file,
-  },
-])
-=======
-      const compressedUrl = await compressImage(file)
-      setMedia([...media, { type: "image", url: compressedUrl, file }])
->>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
-      toast({
-        title: "Image Added",
-        description: `${file.name} (${formatFileSize(file.size)})`,
-      })
-    } catch (error) {
-      toast({
-        title: "Upload Failed",
-        description: "Failed to process image. Please try again.",
-        variant: "destructive",
-      })
-    } finally {
-      setIsUploading(false)
-      if (imageInputRef.current) imageInputRef.current.value = ""
-    }
-  }
-
-  const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-
-    const validation = validateVideoFile(file)
-    if (!validation.valid) {
-      toast({
-        title: "Invalid Video",
-        description: validation.error,
-        variant: "destructive",
-      })
-      return
-    }
-
-<<<<<<< HEAD
     const reader = new FileReader()
 
-reader.onloadend = () => {
-  const videoUrl = reader.result as string
+    reader.onloadend = () => {
 
-  setMedia([
-    ...media,
-    {
-      type: "video",
-      url: videoUrl,
-      file,
-    },
-  ])
+      setMediaPreview(reader.result as string)
 
-  toast({
-    title: "Video Added",
-    description: `${file.name} (${formatFileSize(file.size)})`,
-  })
-}
-
-reader.readAsDataURL(file)
-   
-=======
-    const videoUrl = URL.createObjectURL(file)
-    setMedia([...media, { type: "video", url: videoUrl, file }])
-    toast({
-      title: "Video Added",
-      description: `${file.name} (${formatFileSize(file.size)})`,
-    })
->>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
-
-    if (videoInputRef.current) videoInputRef.current.value = ""
-  }
-
-  const removeMedia = (index: number) => {
-    const newMedia = media.filter((_, i) => i !== index)
-<<<<<<< HEAD
-   
-=======
-    URL.revokeObjectURL(media[index].url)
->>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
-    setMedia(newMedia)
-  }
-
-  const handlePost = () => {
-    if (!content.trim() && media.length === 0) {
-      toast({
-        title: "Empty Post",
-        description: "Please add some content or media to your post.",
-        variant: "destructive",
-      })
-      return
+      if (file.type.startsWith("video")) {
+        setMediaType("video")
+      } else {
+        setMediaType("image")
+      }
     }
 
-    const hashtags = extractHashtags(content)
-
-    try {
-      addPost({
-        username,
-        avatar: username[0]?.toUpperCase() || "P",
-        content,
-        likes: 0,
-        comments: 0,
-        shares: 0,
-        isLiked: false,
-<<<<<<< HEAD
-=======
-        isSaved: false,
->>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
-        piUid: userProfile?.piUid,
-        createdAt: new Date().toISOString(),
-        moderationFlag: "approved",
-        hashtags: hashtags.length > 0 ? hashtags : undefined,
-        media:
-          media.length > 0
-            ? media.map((m) => ({
-                type: m.type,
-                url: m.url,
-              }))
-            : undefined,
-      })
-
-      // Clean up and reset
-      media.forEach((m) => URL.revokeObjectURL(m.url))
-<<<<<<< HEAD
-      
-      setMedia([])
-      
-=======
-      setContent("")
-      setMedia([])
-      setIsExpanded(false)
->>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
-
-      toast({
-        title: "Post Created",
-        description: "Your post has been published successfully!",
-      })
-    } catch (error) {
-      console.error("[v0] Failed to create post:", error)
-      toast({
-        title: "Post Failed",
-        description: "Failed to publish post. Please try again.",
-        variant: "destructive",
-      })
-    }
+    reader.readAsDataURL(file)
   }
 
-  const handleCancel = () => {
-    media.forEach((m) => URL.revokeObjectURL(m.url))
+  const handlePost = async () => {
+
+    const newPost = {
+      id: Date.now(),
+      content,
+      media: mediaPreview,
+      mediaType,
+      likes: 0,
+      comments: [],
+      shares: 0,
+      createdAt: new Date().toISOString(),
+    }
+
+    await push(ref(database, "posts"), newPost)
+
     setContent("")
-    setMedia([])
-    setIsExpanded(false)
+    setMedia(null)
+    setMediaPreview("")
+    setMediaType("")
+
+    alert("Post Created")
   }
 
   return (
-<<<<<<< HEAD
-    <div className="flex gap-3 bg-[#080808] border border-white/10 rounded-[28px] p-4">
-=======
-    <div className="flex gap-3">
->>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
-      <Avatar className="w-10 h-10 shrink-0">
-        <AvatarFallback className="bg-primary text-primary-foreground">
-          {username[0]?.toUpperCase() || "P"}
-        </AvatarFallback>
-      </Avatar>
+    <div
+      style={{
+        background: "#111",
+        padding: "20px",
+        borderRadius: "20px",
+        marginBottom: "20px",
+        color: "white",
+      }}
+    >
 
-      <div className="flex-1 min-w-0">
-        <Textarea
-          placeholder="What's on your mind? Add #hashtags..."
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          onFocus={() => setIsExpanded(true)}
-<<<<<<< HEAD
-          className="min-h-[60px] max-h-[200px] resize-none border border-white/10 bg-[#0B0B0C] text-white rounded-2xl px-4 py-3 placeholder:text-gray-500 focus-visible:ring-1 focus-visible:ring-[#F4B814]"
-=======
-          className="min-h-[60px] max-h-[200px] resize-none border-0 bg-transparent p-0 focus-visible:ring-0 text-base"
->>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
-          aria-label="Create post"
-        />
+      <textarea
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+        placeholder="What's on your mind?"
+        style={{
+          width: "100%",
+          height: "100px",
+          borderRadius: "10px",
+          padding: "10px",
+          marginBottom: "10px",
+        }}
+      />
 
-        {media.length > 0 && (
-          <div className="mt-3 grid grid-cols-2 gap-2">
-            {media.map((item, index) => (
-              <div key={index} className="relative rounded-lg overflow-hidden bg-muted aspect-square">
-                {item.type === "image" ? (
-                  <img
-<<<<<<< HEAD
-  src={item.url || "/placeholder.svg"}
-  crossOrigin="anonymous"
-  alt="Upload preview"
-  className="w-full h-full object-cover"
-/>
-                ) : (
-                  <video
-  src={media[0].url}
-  controls
-  playsInline
-  preload="metadata"
-  className="w-full rounded-2xl"
->
-  <source src={media[0].url} type="video/mp4" />
-</video>
-=======
-                    src={item.url || "/placeholder.svg"}
-                    alt="Upload preview"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <video src={item.url} className="w-full h-full object-cover" controls />
->>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
-                )}
-                <Button
-                  size="icon"
-                  variant="destructive"
-                  className="absolute top-2 right-2 h-6 w-6 rounded-full"
-                  onClick={() => removeMedia(index)}
-                  aria-label="Remove media"
-                >
-                  <X className="w-3 h-3" />
-                </Button>
-              </div>
-            ))}
-          </div>
-        )}
+      <input
+        type="file"
+        onChange={handleFile}
+      />
 
-        {isExpanded && (
-          <div className="mt-3 flex items-center justify-between gap-2">
-            <div className="flex gap-1">
-              <Button
-                size="sm"
-                variant="ghost"
-                className="h-9 w-9 p-0 touch-manipulation"
-                onClick={() => imageInputRef.current?.click()}
-                disabled={isUploading || media.length >= 4}
-                aria-label="Add image"
-              >
-                {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ImagePlus className="w-4 h-4" />}
-              </Button>
-              <input
-                ref={imageInputRef}
-                type="file"
-                accept="image/jpeg,image/png,image/gif,image/webp"
-                onChange={handleImageUpload}
-                className="hidden"
-              />
+      <br />
 
-              <Button
-                size="sm"
-                variant="ghost"
-                className="h-9 w-9 p-0 touch-manipulation"
-                onClick={() => videoInputRef.current?.click()}
-                disabled={media.length >= 4}
-                aria-label="Add video"
-              >
-                <Video className="w-4 h-4" />
-              </Button>
-              <input
-                ref={videoInputRef}
-                type="file"
-                accept="video/mp4,video/webm,video/quicktime"
-                onChange={handleVideoUpload}
-                className="hidden"
-              />
-            </div>
+      <button
+        onClick={handlePost}
+        style={{
+          marginTop: "10px",
+          background: "purple",
+          color: "white",
+          padding: "10px 20px",
+          borderRadius: "10px",
+          border: "none",
+          cursor: "pointer",
+        }}
+      >
+        Post
+      </button>
 
-            <div className="flex gap-2">
-              <Button size="sm" variant="ghost" onClick={handleCancel} className="touch-manipulation">
-                Cancel
-              </Button>
-              <Button
-                size="sm"
-                onClick={handlePost}
-                disabled={!content.trim() && media.length === 0}
-                className="touch-manipulation"
-              >
-                Post
-              </Button>
-            </div>
-          </div>
-        )}
-      </div>
     </div>
   )
 }
