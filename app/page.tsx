@@ -17,14 +17,15 @@ export default function Home() {
       image:
         "https://images.unsplash.com/photo-1639762681057-408e52192e55?q=80&w=1200&auto=format&fit=crop",
       video: "",
-      reel: ""
+      reel: "",
+      comments: []
     }
   ])
 
   const publishPost = () => {
 
     if (!post && !image && !video && !reel) {
-      alert("Create something first")
+      alert("Create something first 🚀")
       return
     }
 
@@ -32,7 +33,8 @@ export default function Home() {
       text: post,
       image,
       video,
-      reel
+      reel,
+      comments: []
     }
 
     setPosts([newPost, ...posts])
@@ -43,7 +45,28 @@ export default function Home() {
     setReel("")
   }
 
+  const deletePost = (index: number) => {
+
+    const updated = posts.filter((_, i) => i !== index)
+
+    setPosts(updated)
+  }
+
+  const addComment = (index: number) => {
+
+    const comment = prompt("Write comment")
+
+    if (!comment) return
+
+    const updated = [...posts]
+
+    updated[index].comments.push(comment)
+
+    setPosts(updated)
+  }
+
   return (
+
     <div
       style={{
         background: "#020617",
@@ -70,9 +93,7 @@ export default function Home() {
         }}
       >
 
-        <h1 style={{ fontSize: "22px" }}>
-          Pi Social Hub
-        </h1>
+        <h1>Pi Social Hub</h1>
 
         <button
           style={{
@@ -81,8 +102,7 @@ export default function Home() {
             color: "white",
             padding: "10px 20px",
             borderRadius: "12px",
-            cursor: "pointer",
-            fontWeight: "bold"
+            cursor: "pointer"
           }}
         >
           Logout
@@ -98,8 +118,8 @@ export default function Home() {
           margin: "0 auto",
           display: "flex",
           gap: "15px",
-          marginBottom: "20px",
-          overflowX: "auto"
+          overflowX: "auto",
+          marginBottom: "20px"
         }}
       >
 
@@ -123,9 +143,7 @@ export default function Home() {
               }}
             />
 
-            <p style={{ marginTop: "5px" }}>
-              {item}
-            </p>
+            <p>{item}</p>
 
           </div>
 
@@ -146,14 +164,7 @@ export default function Home() {
         }}
       >
 
-        <h2
-          style={{
-            marginBottom: "15px",
-            fontSize: "22px"
-          }}
-        >
-          Create Post
-        </h2>
+        <h2>Create Post</h2>
 
         <textarea
           value={post}
@@ -173,15 +184,18 @@ export default function Home() {
           }}
         />
 
-        {/* HIDDEN INPUTS */}
+        {/* FILE INPUTS */}
 
         <input
           type="file"
           accept="image/*"
           style={{ display: "none" }}
           onChange={(e: any) => {
+
             const file = e.target.files[0]
+
             if (file) {
+
               setImage(URL.createObjectURL(file))
             }
           }}
@@ -192,8 +206,11 @@ export default function Home() {
           accept="video/*"
           style={{ display: "none" }}
           onChange={(e: any) => {
+
             const file = e.target.files[0]
+
             if (file) {
+
               setVideo(URL.createObjectURL(file))
             }
           }}
@@ -204,8 +221,11 @@ export default function Home() {
           accept="video/*"
           style={{ display: "none" }}
           onChange={(e: any) => {
+
             const file = e.target.files[0]
+
             if (file) {
+
               setReel(URL.createObjectURL(file))
             }
           }}
@@ -281,11 +301,10 @@ export default function Home() {
             background: "#ff00ff",
             border: "none",
             color: "white",
-            padding: "14px",
+            padding: "15px",
             borderRadius: "15px",
             fontWeight: "bold",
-            cursor: "pointer",
-            fontSize: "15px"
+            cursor: "pointer"
           }}
         >
           🚀 Publish Post
@@ -298,7 +317,8 @@ export default function Home() {
       <div
         style={{
           maxWidth: "450px",
-          margin: "0 auto"
+          margin: "0 auto",
+          paddingBottom: "100px"
         }}
       >
 
@@ -313,6 +333,8 @@ export default function Home() {
               marginBottom: "25px"
             }}
           >
+
+            {/* USER */}
 
             <div
               style={{
@@ -334,10 +356,17 @@ export default function Home() {
               />
 
               <div>
+
                 <h3>Pi Network</h3>
-                <p style={{ color: "#9ca3af" }}>
+
+                <p
+                  style={{
+                    color: "#9ca3af"
+                  }}
+                >
                   Just now
                 </p>
+
               </div>
 
             </div>
@@ -350,7 +379,10 @@ export default function Home() {
               {item.text}
             </p>
 
+            {/* IMAGE */}
+
             {item.image && (
+
               <img
                 src={item.image}
                 alt=""
@@ -360,9 +392,13 @@ export default function Home() {
                   marginBottom: "15px"
                 }}
               />
+
             )}
 
+            {/* VIDEO */}
+
             {item.video && (
+
               <video
                 src={item.video}
                 controls
@@ -372,9 +408,13 @@ export default function Home() {
                   marginBottom: "15px"
                 }}
               />
+
             )}
 
+            {/* REEL */}
+
             {item.reel && (
+
               <video
                 src={item.reel}
                 controls
@@ -386,16 +426,20 @@ export default function Home() {
                   marginBottom: "15px"
                 }}
               />
+
             )}
 
-            {/* ACTION BUTTONS */}
+            {/* ACTIONS */}
 
             <div
               style={{
                 display: "flex",
-                gap: "10px"
+                gap: "10px",
+                marginTop: "10px"
               }}
             >
+
+              {/* LIKE */}
 
               <button
                 onClick={() => {
@@ -412,9 +456,7 @@ export default function Home() {
                       ...likedPosts,
                       index
                     ])
-
                   }
-
                 }}
                 style={{
                   flex: 1,
@@ -428,15 +470,17 @@ export default function Home() {
                   cursor: "pointer"
                 }}
               >
+
                 {likedPosts.includes(index)
                   ? "💖 Liked"
                   : "🤍 Like"}
+
               </button>
 
+              {/* COMMENT */}
+
               <button
-                onClick={() =>
-                  alert("Comment feature coming soon 🚀")
-                }
+                onClick={() => addComment(index)}
                 style={{
                   flex: 1,
                   background: "#1f2937",
@@ -449,6 +493,8 @@ export default function Home() {
               >
                 💬 Comment
               </button>
+
+              {/* SHARE */}
 
               <button
                 onClick={() => {
@@ -473,6 +519,56 @@ export default function Home() {
               </button>
 
             </div>
+
+            {/* DELETE */}
+
+            <button
+              onClick={() => deletePost(index)}
+              style={{
+                width: "100%",
+                marginTop: "15px",
+                background: "red",
+                border: "none",
+                color: "white",
+                padding: "12px",
+                borderRadius: "12px",
+                cursor: "pointer"
+              }}
+            >
+              🗑 Delete Post
+            </button>
+
+            {/* COMMENTS */}
+
+            {item.comments.length > 0 && (
+
+              <div
+                style={{
+                  marginTop: "15px"
+                }}
+              >
+
+                <h4>Comments</h4>
+
+                {item.comments.map((c: any, i: number) => (
+
+                  <div
+                    key={i}
+                    style={{
+                      background: "#1f2937",
+                      padding: "10px",
+                      borderRadius: "10px",
+                      marginTop: "10px"
+                    }}
+                  >
+                    💬 {c}
+                  </div>
+
+                ))}
+
+              </div>
+
+            )}
 
           </div>
 
