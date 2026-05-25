@@ -2,80 +2,159 @@
 
 import { useRouter } from "next/navigation"
 
+import {
+  House,
+  Compass,
+  Bell,
+  User
+} from "lucide-react"
+
 export default function BottomNav() {
 
-  const router = useRouter()
+  const router =
+    useRouter()
 
   return (
 
     <div
-      style={{
-        position: "fixed",
-        bottom: 0,
-        left: 0,
-        width: "100%",
-        height: "70px",
-        background: "#111",
-        display: "flex",
-        justifyContent: "space-around",
-        alignItems: "center",
-        borderTop: "1px solid #333",
-        zIndex: 99999,
-        pointerEvents: "auto"
-      }}
+      className="
+        fixed
+        bottom-4
+        left-1/2
+        -translate-x-1/2
+        w-[95%]
+        max-w-[520px]
+        h-[74px]
+        rounded-[28px]
+        bg-[#0B1020]/90
+        backdrop-blur-2xl
+        border
+        border-white/10
+        flex
+        items-center
+        justify-around
+        z-[9999]
+        shadow-2xl
+      "
     >
 
+      {/* HOME */}
       <button
-        onClick={() => router.push("/")}
-        style={{
-          background: "none",
-          border: "none",
-          color: "white",
-          fontSize: "16px",
-          cursor: "pointer"
-        }}
+
+        onClick={() =>
+          router.push("/")
+        }
+
+        className="
+          flex
+          flex-col
+          items-center
+          gap-1
+          text-pink-500
+        "
       >
-        🏠 Home
+
+        <House size={22} />
+
+        <span
+          className="
+            text-[11px]
+            font-medium
+          "
+        >
+          Home
+        </span>
+
       </button>
 
+      {/* EXPLORE */}
       <button
-        onClick={() => router.push("/explore")}
-        style={{
-          background: "none",
-          border: "none",
-          color: "white",
-          fontSize: "16px",
-          cursor: "pointer"
-        }}
+
+        onClick={() =>
+          router.push("/explore")
+        }
+
+        className="
+          flex
+          flex-col
+          items-center
+          gap-1
+          text-gray-300
+          hover:text-white
+          transition
+        "
       >
-        🔍 Explore
+
+        <Compass size={22} />
+
+        <span
+          className="
+            text-[11px]
+          "
+        >
+          Explore
+        </span>
+
       </button>
 
+      {/* NOTIFICATION */}
       <button
-        onClick={() => router.push("/notifications")}
-        style={{
-          background: "none",
-          border: "none",
-          color: "white",
-          fontSize: "16px",
-          cursor: "pointer"
-        }}
+
+        onClick={() =>
+          router.push("/notifications")
+        }
+
+        className="
+          flex
+          flex-col
+          items-center
+          gap-1
+          text-gray-300
+          hover:text-white
+          transition
+        "
       >
-        🔔 Notifications
+
+        <Bell size={22} />
+
+        <span
+          className="
+            text-[11px]
+          "
+        >
+          Alerts
+        </span>
+
       </button>
 
+      {/* PROFILE */}
       <button
-        onClick={() => router.push("/profile")}
-        style={{
-          background: "none",
-          border: "none",
-          color: "#ff00ff",
-          fontSize: "16px",
-          fontWeight: "bold",
-          cursor: "pointer"
-        }}
+
+        onClick={() =>
+          router.push("/profile")
+        }
+
+        className="
+          flex
+          flex-col
+          items-center
+          gap-1
+          text-gray-300
+          hover:text-white
+          transition
+        "
       >
-        👤 Profile
+
+        <User size={22} />
+
+        <span
+          className="
+            text-[11px]
+          "
+        >
+          Profile
+        </span>
+
       </button>
 
     </div>

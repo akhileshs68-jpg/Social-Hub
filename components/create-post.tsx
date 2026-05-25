@@ -1,216 +1,329 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-
-import {
-  ref,
-  push
-} from "firebase/database"
+import { useState } from "react";
 
 import {
-  auth,
-  database
-} from "../lib/firebase"
+  Bell,
+  MessageCircle,
+  Search,
+  Plus,
+  Image,
+  Video,
+  FileText,
+  CircleDashed,
+} from "lucide-react";
 
-export default function CreatePost() {
+export default function Header() {
 
-  const [content, setContent] =
-    useState("")
-
-  const [mediaPreview, setMediaPreview] =
-    useState("")
-
-  const [mediaType, setMediaType] =
-    useState("")
-
-  // FILE
-  const handleFile = (
-    e: any
-  ) => {
-
-    const file = e.target.files[0]
-
-    if (!file) return
-
-    const reader = new FileReader()
-
-    reader.onloadend = () => {
-
-      setMediaPreview(
-        reader.result as string
-      )
-
-    }
-
-    reader.readAsDataURL(file)
-
-    // TYPE
-    if (
-      file.type.startsWith("image")
-    ) {
-
-      setMediaType("image")
-
-    } else {
-
-      setMediaType("video")
-
-    }
-
-  }
-
-  // POST
-  const createPost = async () => {
-
-    if (
-      !content &&
-      !mediaPreview
-    ) {
-      return
-    }
-
-    const user = auth.currentUser
-
-    if (!user) {
-
-      alert("Login First")
-
-      return
-
-    }
-
-    await push(
-      ref(database, "posts"),
-      {
-
-        username:
-          user.displayName ||
-          "Pioneer",
-
-        email:
-          user.email,
-
-        content,
-
-        media:
-          mediaPreview,
-
-        mediaType,
-
-        likes: 0,
-
-        comments: 0,
-
-        shares: 0,
-
-        createdAt:
-          Date.now()
-
-      }
-    )
-
-    alert("Post Created")
-
-    setContent("")
-    setMediaPreview("")
-    setMediaType("")
-
-  }
+  const [open, setOpen] =
+    useState(false);
 
   return (
 
-    <div
-      style={{
-        background: "#111",
-        padding: "20px",
-        borderRadius: "20px",
-        marginBottom: "25px"
-      }}
+    <header
+      className="
+        sticky
+        top-0
+        z-50
+        backdrop-blur-2xl
+        bg-black/40
+        border-b
+        border-white/10
+      "
     >
 
-      {/* TEXTAREA */}
-      <textarea
-        value={content}
-        onChange={(e) =>
-          setContent(
-            e.target.value
-          )
-        }
-        placeholder="What's on your mind?"
-        style={{
-          width: "100%",
-          minHeight: "120px",
-          background: "#1a1a1a",
-          border: "1px solid #333",
-          borderRadius: "15px",
-          padding: "15px",
-          color: "white",
-          resize: "none",
-          marginBottom: "15px"
-        }}
-      />
-
-      {/* FILE */}
-      <input
-        type="file"
-        onChange={handleFile}
-        style={{
-          marginBottom: "20px",
-          color: "white"
-        }}
-      />
-
-      {/* IMAGE PREVIEW */}
-      {mediaType === "image" &&
-        mediaPreview && (
-
-          <img
-            src={mediaPreview}
-            style={{
-              width: "100%",
-              borderRadius: "15px",
-              marginBottom: "15px"
-            }}
-          />
-
-        )}
-
-      {/* VIDEO PREVIEW */}
-      {mediaType === "video" &&
-        mediaPreview && (
-
-          <video
-            src={mediaPreview}
-            controls
-            style={{
-              width: "100%",
-              borderRadius: "15px",
-              marginBottom: "15px"
-            }}
-          />
-
-        )}
-
-      {/* BUTTON */}
-      <button
-        onClick={createPost}
-        style={{
-          width: "100%",
-          padding: "15px",
-          border: "none",
-          borderRadius: "12px",
-          background: "#ff00ff",
-          color: "white",
-          fontWeight: "bold",
-          cursor: "pointer",
-          fontSize: "16px"
-        }}
+      <div
+        className="
+          max-w-[520px]
+          mx-auto
+          px-4
+          py-4
+          flex
+          items-center
+          justify-between
+        "
       >
-        Create Post
-      </button>
 
-    </div>
+        {/* LOGO */}
+        <h1
+          className="
+            text-[26px]
+            font-extrabold
+            tracking-tight
+            bg-gradient-to-r
+            from-pink-500
+            via-violet-500
+            to-blue-500
+            bg-clip-text
+            text-transparent
+          "
+        >
+          Pi Social Hub
+        </h1>
 
-  )
+        {/* RIGHT SIDE */}
+        <div
+          className="
+            flex
+            items-center
+            gap-3
+            relative
+          "
+        >
 
+          {/* SEARCH */}
+          <button
+            className="
+              w-11
+              h-11
+              rounded-2xl
+              bg-white/5
+              border
+              border-white/10
+              flex
+              items-center
+              justify-center
+              hover:bg-white/10
+              transition
+              shadow-lg
+            "
+          >
+            <Search size={19} />
+          </button>
+
+          {/* NOTIFICATION */}
+          <button
+            className="
+              w-11
+              h-11
+              rounded-2xl
+              bg-white/5
+              border
+              border-white/10
+              flex
+              items-center
+              justify-center
+              hover:bg-white/10
+              transition
+              shadow-lg
+            "
+          >
+            <Bell size={19} />
+          </button>
+
+          {/* CHAT */}
+          <button
+            className="
+              w-11
+              h-11
+              rounded-2xl
+              bg-white/5
+              border
+              border-white/10
+              flex
+              items-center
+              justify-center
+              hover:bg-white/10
+              transition
+              shadow-lg
+            "
+          >
+            <MessageCircle size={19} />
+          </button>
+
+          {/* PLUS BUTTON */}
+          <button
+
+            onClick={() =>
+              setOpen(!open)
+            }
+
+            className="
+              w-12
+              h-12
+              rounded-2xl
+              bg-gradient-to-r
+              from-pink-500
+              via-violet-500
+              to-blue-500
+              flex
+              items-center
+              justify-center
+              shadow-[0_0_30px_rgba(168,85,247,0.5)]
+              hover:scale-105
+              transition
+            "
+          >
+
+            <Plus size={24} />
+
+          </button>
+
+          {/* POPUP MENU */}
+          {open && (
+
+            <div
+              className="
+                absolute
+                top-16
+                right-0
+                w-60
+                rounded-[30px]
+                p-3
+                bg-[#0f0f14]/95
+                backdrop-blur-2xl
+                border
+                border-white/10
+                shadow-2xl
+                space-y-2
+              "
+            >
+
+              {/* STORY */}
+              <button
+                className="
+                  w-full
+                  flex
+                  items-center
+                  gap-4
+                  p-4
+                  rounded-2xl
+                  hover:bg-white/10
+                  transition
+                "
+              >
+
+                <div
+                  className="
+                    w-10
+                    h-10
+                    rounded-xl
+                    bg-pink-500/20
+                    flex
+                    items-center
+                    justify-center
+                  "
+                >
+                  <CircleDashed size={18} />
+                </div>
+
+                <span>
+                  Add Story
+                </span>
+
+              </button>
+
+              {/* PHOTO */}
+              <button
+                className="
+                  w-full
+                  flex
+                  items-center
+                  gap-4
+                  p-4
+                  rounded-2xl
+                  hover:bg-white/10
+                  transition
+                "
+              >
+
+                <div
+                  className="
+                    w-10
+                    h-10
+                    rounded-xl
+                    bg-blue-500/20
+                    flex
+                    items-center
+                    justify-center
+                  "
+                >
+                  <Image size={18} />
+                </div>
+
+                <span>
+                  Upload Photo
+                </span>
+
+              </button>
+
+              {/* VIDEO */}
+              <button
+                className="
+                  w-full
+                  flex
+                  items-center
+                  gap-4
+                  p-4
+                  rounded-2xl
+                  hover:bg-white/10
+                  transition
+                "
+              >
+
+                <div
+                  className="
+                    w-10
+                    h-10
+                    rounded-xl
+                    bg-violet-500/20
+                    flex
+                    items-center
+                    justify-center
+                  "
+                >
+                  <Video size={18} />
+                </div>
+
+                <span>
+                  Upload Video
+                </span>
+
+              </button>
+
+              {/* POST */}
+              <button
+                className="
+                  w-full
+                  flex
+                  items-center
+                  gap-4
+                  p-4
+                  rounded-2xl
+                  hover:bg-white/10
+                  transition
+                "
+              >
+
+                <div
+                  className="
+                    w-10
+                    h-10
+                    rounded-xl
+                    bg-green-500/20
+                    flex
+                    items-center
+                    justify-center
+                  "
+                >
+                  <FileText size={18} />
+                </div>
+
+                <span>
+                  Create Post
+                </span>
+
+              </button>
+
+            </div>
+
+          )}
+
+        </div>
+
+      </div>
+
+    </header>
+
+  );
 }

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 import {
   createUserWithEmailAndPassword,
@@ -11,6 +12,8 @@ import {
 import { auth } from "../../lib/firebase"
 
 export default function LoginPage() {
+
+  const router = useRouter()
 
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
@@ -35,7 +38,7 @@ export default function LoginPage() {
 
       alert("Signup Success")
 
-      window.location.href = "/"
+      router.push("/")
 
     } catch (error: any) {
 
@@ -58,7 +61,7 @@ export default function LoginPage() {
 
       alert("Login Success")
 
-      window.location.href = "/"
+      router.push("/")
 
     } catch (error: any) {
 
