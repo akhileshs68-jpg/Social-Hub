@@ -1,5 +1,5 @@
-import Feed from "@/components/feed"
-import BottomNav from "@/components/bottom-nav"
+import Feed from "../components/feed"
+import BottomNav from "../components/bottom-nav"
 
 export default function Home() {
 
