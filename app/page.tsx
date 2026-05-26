@@ -3,202 +3,306 @@
 import { useState } from "react";
 
 export default function Home() {
-  const [posts, setPosts] = useState([
-    {
-      user: "Pi Network",
-      text: "Welcome to Pi Social Hub 🚀",
-      image:
-        "https://images.unsplash.com/photo-1639762681057-408e52192e55?q=80&w=1200&auto=format&fit=crop",
-      likes: 0,
-    },
-  ]);
+  const [liked, setLiked] = useState(false);
 
   const [text, setText] = useState("");
 
-  const publishPost = () => {
-    if (!text) return;
+  const [posts, setPosts] = useState([
+    {
+      id: 1,
+      user: "Pi Network",
+      text: "Welcome to Pi Social Hub 🚀",
+      image:
+        "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=1200",
+    },
+  ]);
+
+  const handlePost = () => {
+    if (!text.trim()) {
+      alert("Write something first");
+      return;
+    }
 
     const newPost = {
+      id: Date.now(),
       user: "You",
-      text,
+      text: text,
       image:
-        "https://images.unsplash.com/photo-1639762681057-408e52192e55?q=80&w=1200&auto=format&fit=crop",
-      likes: 0,
+        "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=1200",
     };
 
     setPosts([newPost, ...posts]);
     setText("");
   };
 
-  const likePost = (index: number) => {
-    const updated = [...posts];
-    updated[index].likes += 1;
-    setPosts(updated);
+  const handleDelete = (id: number) => {
+    setPosts(posts.filter((post) => post.id !== id));
   };
 
-  const deletePost = (index: number) => {
-    const updated = posts.filter((_, i) => i !== index);
-    setPosts(updated);
+  const handleLike = () => {
+    setLiked(!liked);
+  };
+
+  const handleComment = () => {
+    alert("Comment Button Working");
+  };
+
+  const handleShare = () => {
+    navigator.clipboard.writeText(window.location.href);
+    alert("Link Copied");
   };
 
   return (
     <div
       style={{
-        background: "#020617",
         minHeight: "100vh",
+        background: "#020617",
         color: "white",
+        fontFamily: "Arial",
         display: "flex",
-        justifyContent: "center",
-        paddingTop: "90px",
-        paddingBottom: "100px",
-        overflowX: "hidden",
-      }}
-    >
-{/* TOP NAVBAR */}
-<div
-  style={{
-    position: "fixed",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "70px",
-    background: "#111827",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 1000,
-    borderBottom: "1px solid #222",
-  }}
->
-  <div
-    style={{
-      width: "100%",
-      maxWidth: "500px",
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      padding: "0 15px",
-      boxSizing: "border-box",
-    }}
-  >
-    <h1
-      style={{
-        fontSize: "20px",
-        fontWeight: "bold",
-        margin: 0,
-      }}
-    >
-      Pi Social Hub
-    </h1>
-
-    <div
-      style={{
-        display: "flex",
+        flexDirection: "column",
         alignItems: "center",
-        gap: "16px",
+        paddingBottom: "120px",
       }}
     >
-      <span style={{ cursor: "pointer" }}>🏠</span>
-      <span style={{ cursor: "pointer" }}>🔎</span>
-      <span style={{ cursor: "pointer" }}>🔔</span>
-      <span style={{ cursor: "pointer" }}>👤</span>
-
-      <button
-        style={{
-          background: "#ff00ff",
-          border: "none",
-          color: "white",
-          padding: "10px 16px",
-          borderRadius: "12px",
-          cursor: "pointer",
-          fontWeight: "bold",
-        }}
-      >
-        Logout
-      </button>
-    </div>
-  </div>
-</div>
-
-      {/* MAIN CONTENT */}
+      {/* TOP HEADER */}
       <div
         style={{
           width: "100%",
-          maxWidth: "500px",
-          padding: "0 15px",
+          background: "#0f172a",
+          borderBottom: "1px solid #1e293b",
+          position: "sticky",
+          top: 0,
+          zIndex: 1000,
+        }}
+      >
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "420px",
+            margin: "0 auto",
+            padding: "14px 16px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            boxSizing: "border-box",
+          }}
+        >
+          <h1
+            style={{
+              margin: 0,
+              fontSize: "28px",
+              fontWeight: "bold",
+            }}
+          >
+            Pi Social Hub
+          </h1>
+
+          <div
+            style={{
+              display: "flex",
+              gap: "14px",
+              alignItems: "center",
+            }}
+          >
+            <button style={iconBtn}>🏠</button>
+            <button style={iconBtn}>🔎</button>
+            <button style={iconBtn}>🔔</button>
+            <button style={iconBtn}>👤</button>
+
+            <button
+              onClick={() => alert("Logout")}
+              style={{
+                background: "#ff00ff",
+                border: "none",
+                color: "white",
+                padding: "10px 16px",
+                borderRadius: "10px",
+                cursor: "pointer",
+                fontWeight: "bold",
+              }}
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* STORIES */}
+      <div
+        style={{
+          width: "100%",
+          maxWidth: "420px",
+          display: "flex",
+          gap: "18px",
+          padding: "18px 10px",
           boxSizing: "border-box",
         }}
       >
-        {/* STORIES */}
-<div
-  style={{
-    display: "flex",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    gap: "18px",
-    marginTop: "0px",
-    marginBottom: "0px",
-    width: "100%",
-    maxWidth: "420px",
-    marginLeft: "0",
-    marginRight: "auto",
-    paddingLeft: "10px"
-  }}
->
-          {["You", "Pi", "Tech", "Crypto"].map((item, index) => (
-            <div
-              key={index}
-              style={{
-                textAlign: "center",
-              }}
-            >
-              <img
-                src={`https://i.pravatar.cc/150?img=${index + 10}`}
-                alt=""
-                style={{
-                  width: "60px",
-                  height: "60px",
-                  borderRadius: "50%",
-                  border: "3px solid #ff00ff",
-                }}
-              />
-              <p style={{ marginTop: "5px", fontSize: "14px" }}>{item}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* CREATE POST */}
-        <div
-          style={{
-            background: "#111827",
-            padding: "20px",
-            borderRadius: "20px",
-            marginBottom: "25px",
-          }}
-        >
-          <h2
+        {["You", "Pi", "Tech", "Crypto"].map((item, i) => (
+          <div
+            key={i}
             style={{
-              fontSize: "20px",
-              marginBottom: "15px",
+              textAlign: "center",
             }}
           >
-            Create Post
-          </h2>
+            <img
+              src={`https://i.pravatar.cc/150?img=${i + 10}`}
+              alt={item}
+              style={{
+                width: "58px",
+                height: "58px",
+                borderRadius: "50%",
+                border: "3px solid #ff00ff",
+                objectFit: "cover",
+              }}
+            />
 
-          <textarea
-            placeholder="What's happening in Pi Network?"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
+            <div
+              style={{
+                marginTop: "6px",
+                fontSize: "14px",
+              }}
+            >
+              {item}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* CREATE POST */}
+      <div
+        style={{
+          width: "100%",
+          maxWidth: "420px",
+          background: "#111827",
+          borderRadius: "20px",
+          padding: "16px",
+          boxSizing: "border-box",
+        }}
+      >
+        <h2>Create Post</h2>
+
+        <textarea
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="What's happening in Pi Network?"
+          style={{
+            width: "100%",
+            height: "100px",
+            background: "#1e293b",
+            border: "none",
+            borderRadius: "14px",
+            color: "white",
+            padding: "14px",
+            resize: "none",
+            boxSizing: "border-box",
+          }}
+        />
+
+        <div
+          style={{
+            display: "flex",
+            gap: "10px",
+            marginTop: "14px",
+          }}
+        >
+          <button
+            onClick={() => alert("Photo Upload")}
+            style={actionBtn}
+          >
+            📷 Photo
+          </button>
+
+          <button
+            onClick={() => alert("Video Upload")}
+            style={actionBtn}
+          >
+            🎥 Video
+          </button>
+
+          <button
+            onClick={() => alert("Reels Upload")}
+            style={actionBtn}
+          >
+            🎞 Reels
+          </button>
+        </div>
+
+        <button
+          onClick={handlePost}
+          style={{
+            width: "100%",
+            marginTop: "16px",
+            background: "#ff00ff",
+            border: "none",
+            color: "white",
+            padding: "16px",
+            borderRadius: "14px",
+            fontWeight: "bold",
+            cursor: "pointer",
+            fontSize: "16px",
+          }}
+        >
+          🚀 Publish Post
+        </button>
+      </div>
+
+      {/* POSTS */}
+      {posts.map((post) => (
+        <div
+          key={post.id}
+          style={{
+            width: "100%",
+            maxWidth: "420px",
+            background: "#111827",
+            borderRadius: "20px",
+            padding: "14px",
+            marginTop: "20px",
+            boxSizing: "border-box",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+            }}
+          >
+            <img
+              src="https://i.pravatar.cc/150?img=20"
+              style={{
+                width: "45px",
+                height: "45px",
+                borderRadius: "50%",
+              }}
+            />
+
+            <div>
+              <div style={{ fontWeight: "bold" }}>
+                {post.user}
+              </div>
+
+              <div
+                style={{
+                  color: "#cbd5e1",
+                  fontSize: "14px",
+                }}
+              >
+                Just now
+              </div>
+            </div>
+          </div>
+
+          <p>{post.text}</p>
+
+          <img
+            src={post.image}
             style={{
               width: "100%",
-              height: "100px",
-              background: "#1f2937",
-              border: "none",
-              borderRadius: "15px",
-              color: "white",
-              padding: "15px",
-              resize: "none",
-              boxSizing: "border-box",
+              borderRadius: "16px",
+              height: "260px",
+              objectFit: "cover",
             }}
           />
 
@@ -206,282 +310,138 @@ export default function Home() {
             style={{
               display: "flex",
               gap: "10px",
-              marginTop: "15px",
+              marginTop: "14px",
             }}
           >
             <button
-              style={{
-                flex: 1,
-                background: "#1f2937",
-                border: "none",
-                color: "white",
-                padding: "12px",
-                borderRadius: "12px",
-                cursor: "pointer",
-              }}
+              onClick={handleLike}
+              style={actionBtn}
             >
-              📷 Photo
+              {liked ? "❤️ Liked" : "🤍 Like"}
             </button>
 
             <button
-              style={{
-                flex: 1,
-                background: "#1f2937",
-                border: "none",
-                color: "white",
-                padding: "12px",
-                borderRadius: "12px",
-                cursor: "pointer",
-              }}
+              onClick={handleComment}
+              style={actionBtn}
             >
-              🎥 Video
+              💬 Comment
             </button>
 
             <button
-              style={{
-                flex: 1,
-                background: "#1f2937",
-                border: "none",
-                color: "white",
-                padding: "12px",
-                borderRadius: "12px",
-                cursor: "pointer",
-              }}
+              onClick={handleShare}
+              style={actionBtn}
             >
-              🎬 Reels
+              📤 Share
             </button>
           </div>
 
           <button
-            onClick={publishPost}
+            onClick={() => handleDelete(post.id)}
             style={{
               width: "100%",
-              marginTop: "15px",
-              background: "#ff00ff",
+              marginTop: "14px",
+              background: "red",
               border: "none",
               color: "white",
-              padding: "15px",
-              borderRadius: "15px",
-              fontWeight: "bold",
+              padding: "14px",
+              borderRadius: "12px",
               cursor: "pointer",
-              fontSize: "16px",
+              fontWeight: "bold",
             }}
           >
-            🚀 Publish Post
+            🗑 Delete Post
           </button>
         </div>
+      ))}
 
-        {/* POSTS */}
-        {posts.map((post, index) => (
-          <div
-            key={index}
-            style={{
-              background: "#111827",
-              borderRadius: "20px",
-              padding: "15px",
-              marginBottom: "20px",
-            }}
+      {/* BOTTOM NAV */}
+      <div
+        style={{
+          position: "fixed",
+          bottom: "10px",
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          zIndex: 1000,
+        }}
+      >
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "420px",
+            background: "#111827",
+            border: "1px solid #1e293b",
+            borderRadius: "18px",
+            padding: "14px 10px",
+            display: "flex",
+            justifyContent: "space-around",
+            alignItems: "center",
+            boxSizing: "border-box",
+          }}
+        >
+          <button
+            onClick={() => alert("Home")}
+            style={navBtn}
           >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "10px",
-                marginBottom: "10px",
-              }}
-            >
-              <img
-                src={`https://i.pravatar.cc/150?img=${index + 20}`}
-                alt=""
-                style={{
-                  width: "45px",
-                  height: "45px",
-                  borderRadius: "50%",
-                }}
-              />
+            🏠 Home
+          </button>
 
-              <div>
-                <h3>{post.user}</h3>
-                <p
-                  style={{
-                    color: "#9ca3af",
-                    fontSize: "13px",
-                  }}
-                >
-                  Just now
-                </p>
-              </div>
-            </div>
+          <button
+            onClick={() => alert("Explore")}
+            style={navBtn}
+          >
+            🔎 Explore
+          </button>
 
-            <p style={{ marginBottom: "15px" }}>{post.text}</p>
+          <button
+            onClick={handlePost}
+            style={navBtn}
+          >
+            ➕ Create
+          </button>
 
-            <img
-              src={post.image}
-              alt=""
-              style={{
-                width: "100%",
-                borderRadius: "15px",
-                marginBottom: "15px",
-              }}
-            />
+          <button
+            onClick={() => alert("Alerts")}
+            style={navBtn}
+          >
+            🔔 Alerts
+          </button>
 
-            <div
-              style={{
-                display: "flex",
-                gap: "10px",
-              }}
-            >
-              <button
-                onClick={() => likePost(index)}
-                style={{
-                  flex: 1,
-                  background: "#1f2937",
-                  border: "none",
-                  color: "white",
-                  padding: "12px",
-                  borderRadius: "12px",
-                  cursor: "pointer",
-                }}
-              >
-                🤍 Like {post.likes}
-              </button>
-
-              <button
-                style={{
-                  flex: 1,
-                  background: "#1f2937",
-                  border: "none",
-                  color: "white",
-                  padding: "12px",
-                  borderRadius: "12px",
-                  cursor: "pointer",
-                }}
-              >
-                💬 Comment
-              </button>
-
-              <button
-                style={{
-                  flex: 1,
-                  background: "#1f2937",
-                  border: "none",
-                  color: "white",
-                  padding: "12px",
-                  borderRadius: "12px",
-                  cursor: "pointer",
-                }}
-              >
-                📤 Share
-              </button>
-            </div>
-
-            <button
-              onClick={() => deletePost(index)}
-              style={{
-                width: "100%",
-                marginTop: "15px",
-                background: "red",
-                border: "none",
-                color: "white",
-                padding: "12px",
-                borderRadius: "12px",
-                cursor: "pointer",
-              }}
-            >
-              🗑 Delete Post
-            </button>
-          </div>
-        ))}
+          <button
+            onClick={() => alert("Profile")}
+            style={navBtn}
+          >
+            👤 Profile
+          </button>
+        </div>
       </div>
-
-      {/* BOTTOM NAVBAR */}
-<div
-  style={{
-    position: "fixed",
-    bottom: "15px",
-    left: "50%",
-    transform: "translateX(-50%)",
-
-    width: "95%",
-    maxWidth: "500px",
-
-    height: "65px",
-    background: "#111827",
-
-    borderRadius: "20px",
-    border: "1px solid #222",
-
-    display: "flex",
-    justifyContent: "space-around",
-    alignItems: "center",
-
-    zIndex: 1000,
-    boxSizing: "border-box",
-
-    padding: "0 10px",
-  }}
->
-  <button
-    style={{
-      background: "transparent",
-      border: "none",
-      color: "white",
-      cursor: "pointer",
-      fontSize: "14px",
-    }}
-  >
-    🏠 Home
-  </button>
-
-  <button
-    style={{
-      background: "transparent",
-      border: "none",
-      color: "white",
-      cursor: "pointer",
-      fontSize: "14px",
-    }}
-  >
-    🔎 Explore
-  </button>
-
-  <button
-    style={{
-      background: "transparent",
-      border: "none",
-      color: "#ff00ff",
-      cursor: "pointer",
-      fontWeight: "bold",
-      fontSize: "14px",
-    }}
-  >
-    ➕ Create
-  </button>
-
-  <button
-    style={{
-      background: "transparent",
-      border: "none",
-      color: "white",
-      cursor: "pointer",
-      fontSize: "14px",
-    }}
-  >
-    🔔 Alerts
-  </button>
-
-  <button
-    style={{
-      background: "transparent",
-      border: "none",
-      color: "white",
-      cursor: "pointer",
-      fontSize: "14px",
-    }}
-  >
-    👤 Profile
-  </button>
-</div>
     </div>
   );
 }
+
+const iconBtn = {
+  background: "transparent",
+  border: "none",
+  color: "white",
+  cursor: "pointer",
+  fontSize: "18px",
+};
+
+const actionBtn = {
+  flex: 1,
+  background: "#1e293b",
+  border: "none",
+  color: "white",
+  padding: "14px",
+  borderRadius: "12px",
+  cursor: "pointer",
+  fontWeight: "bold",
+};
+
+const navBtn = {
+  background: "transparent",
+  border: "none",
+  color: "white",
+  cursor: "pointer",
+  fontSize: "14px",
+};
