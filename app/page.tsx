@@ -1,6 +1,6 @@
 "use client"
 
-<<<<<<< HEAD
+
 import { useState } from "react"
 import { usePiAuth } from "@/contexts/pi-auth-context"
 import { Header } from "@/components/header"
@@ -35,7 +35,9 @@ export default function HomePage() {
     </div>
   )
 }
+
 =======
+
 import Feed from "../components/feed"
 import BottomNav from "../components/bottom-nav"
 import CreatePost from "../components/create-post"
@@ -155,4 +157,4 @@ export default function Home() {
   )
 
 }
->>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
+>>>>> c07617a5128ffd992b542a41c1dea574864a3046
