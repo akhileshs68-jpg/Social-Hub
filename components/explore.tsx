@@ -14,9 +14,15 @@ const TRENDING_TOPICS: TrendingTopic[] = [
 ]
 
 const SUGGESTED_USERS: User[] = [
+<<<<<<< HEAD
   { id: "1", username: "pi_official", piUid: "pi-official", avatar: "P", bio: "Official Pi Network account", followers: 125000 },
   { id: "2", username: "crypto_news", piUid: "crypto-news", avatar: "C", bio: "Daily crypto updates", followers: 89000 },
   { id: "3", username: "blockchain_edu", piUid: "blockchain-edu", avatar: "B", bio: "Learning blockchain together", followers: 54000 },
+=======
+  { id: "1", username: "pi_official", avatar: "P", bio: "Official Pi Network account", followers: "125K" },
+  { id: "2", username: "crypto_news", avatar: "C", bio: "Daily crypto updates", followers: "89K" },
+  { id: "3", username: "blockchain_edu", avatar: "B", bio: "Learning blockchain together", followers: "54K" },
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
 ]
 
 export function Explore() {

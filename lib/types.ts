@@ -1,5 +1,6 @@
 export interface Post {
   id: string
+<<<<<<< HEAD
   userId?: string
   username: string
   avatar: string
@@ -17,6 +18,17 @@ export interface Post {
   imageUrl?: string
   mediaType?: "image" | "video"
   cloudinaryPublicId?: string
+=======
+  username: string
+  avatar: string
+  timeAgo: string
+  content: string
+  likes: number
+  comments: number
+  shares: number
+  isLiked: boolean
+  imageUrl?: string
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
   // New fields for enhanced post system
   videoUrl?: string
   media?: {
@@ -29,12 +41,17 @@ export interface Post {
   createdAt?: string
   moderationFlag?: "pending" | "approved" | "flagged"
   isEdited?: boolean
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
   // Monetization fields
   tipsReceived?: number
   creatorEarnings?: number
   isPinned?: boolean
 }
 
+<<<<<<< HEAD
 export interface PostComment {
   id: string
   postId: string
@@ -46,6 +63,8 @@ export interface PostComment {
   createdAt: string
 }
 
+=======
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
 export interface Badge {
   id: string
   name: string
@@ -69,16 +88,26 @@ export interface Streak {
   maxCount: number
   lastActivityDate: string
   rewardAmount: number
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
 }
 
 export interface User {
   id: string
   username: string
+<<<<<<< HEAD
   displayName?: string
   piUid: string
   avatar: string
   photoURL?: string
   photoCloudinaryPublicId?: string
+=======
+  piUid: string
+  avatar: string
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
   bio?: string
   followers?: number
   following?: number
@@ -86,6 +115,10 @@ export interface User {
   loginTimestamp?: string
   location?: string
   website?: string
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
   // SHUB Token system fields
   shub_tokens?: number
   first_login_reward?: boolean
@@ -128,13 +161,31 @@ export type SHPTokenTransaction = SHUBTokenTransaction
 export interface Notification {
   id: string
   type: "like" | "comment" | "follow" | "message" | "premium" | "mention"
+<<<<<<< HEAD
+=======
+=======
+}
+
+export interface Notification {
+  id: string
+  type: "like" | "comment" | "follow" | "mention" | "message" | "premium"
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
   user: string
   avatar: string
   content: string
   time: string
   read: boolean
+<<<<<<< HEAD
   actionUrl?: string
   actionLabel?: string
+=======
+<<<<<<< HEAD
+  actionUrl?: string
+  actionLabel?: string
+=======
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
 }
 
 export interface TrendingTopic {
@@ -177,11 +228,17 @@ export interface Status {
   piUid: string
   username: string
   avatar: string
+<<<<<<< HEAD
   authorPhotoURL?: string
   media: {
     type: "image" | "video"
     url: string
     cloudinaryPublicId?: string
+=======
+  media: {
+    type: "image" | "video"
+    url: string
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
     thumbnail?: string
   }
   caption?: string
@@ -208,6 +265,10 @@ export interface StatusGroup {
   hasUnseen: boolean
 }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
 export type MessageType = "text" | "image" | "video" | "audio" | "file" | "voice" | "link"
 
 export interface MessageReactionEntry {
@@ -217,6 +278,11 @@ export interface MessageReactionEntry {
   users: string[] // usernames
 }
 
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
 export interface Message {
   id: string
   conversationId: string
@@ -226,16 +292,32 @@ export interface Message {
   content: string
   timestamp: string
   status: "sending" | "sent" | "delivered" | "read"
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
   type: MessageType
   mediaUrl?: string
   mediaThumb?: string
   fileName?: string
   fileSize?: number // bytes
   duration?: number // seconds for audio/voice/video
+<<<<<<< HEAD
+=======
+=======
+  type: "text" | "image" | "video" | "audio"
+  mediaUrl?: string
+  mediaThumb?: string
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
   replyTo?: {
     id: string
     content: string
     senderUsername: string
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
     type?: MessageType
   }
   forwardedFrom?: {
@@ -246,6 +328,14 @@ export interface Message {
   isEdited?: boolean
   editedAt?: string
   isDeleted?: boolean
+<<<<<<< HEAD
+=======
+=======
+  }
+  isEdited?: boolean
+  editedAt?: string
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
 }
 
 export interface Conversation {
@@ -261,9 +351,18 @@ export interface Conversation {
   groupAvatar?: string
   groupDescription?: string
   adminIds?: string[]
+<<<<<<< HEAD
   moderatorIds?: string[]
   isPublic?: boolean
   inviteLink?: string
+=======
+<<<<<<< HEAD
+  moderatorIds?: string[]
+  isPublic?: boolean
+  inviteLink?: string
+=======
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
   muteUntil?: string
   isPinned?: boolean
 }
@@ -274,6 +373,10 @@ export interface ConversationParticipant {
   avatar: string
   isOnline: boolean
   lastSeen?: string
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
   role?: "admin" | "moderator" | "member"
   joinedAt?: string
 }
@@ -286,6 +389,15 @@ export interface GroupSettings {
   inviteLink: string
 }
 
+<<<<<<< HEAD
+=======
+=======
+  role?: "admin" | "member" // For groups
+  joinedAt?: string
+}
+
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
 export interface TypingIndicator {
   conversationId: string
   userId: string

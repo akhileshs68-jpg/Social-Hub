@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { existsSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
 
@@ -29,6 +30,16 @@ for (const envFile of [".env", ".env.production", ".env.local", "app/.env.local"
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+=======
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
   images: {
     unoptimized: true,
   },

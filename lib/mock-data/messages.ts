@@ -168,6 +168,10 @@ export const mockMessages: Record<string, Message[]> = {
       senderId: "user1",
       senderUsername: "alexchen",
       senderAvatar: "A",
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
       content: "I'm doing great! Just mining some Pi",
       timestamp: new Date(Date.now() - 3300000).toISOString(),
       status: "read",
@@ -175,6 +179,15 @@ export const mockMessages: Record<string, Message[]> = {
       reactions: {
         "👍": { emoji: "👍", count: 1, reactedByMe: true, users: ["You"] },
       },
+<<<<<<< HEAD
+=======
+=======
+      content: "I'm doing great! Just mining some Pi 😊",
+      timestamp: new Date(Date.now() - 3300000).toISOString(),
+      status: "read",
+      type: "text",
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
     },
     {
       id: "msg1-3",
@@ -186,10 +199,19 @@ export const mockMessages: Record<string, Message[]> = {
       timestamp: new Date(Date.now() - 300000).toISOString(),
       status: "read",
       type: "text",
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
       reactions: {
         "❤️": { emoji: "❤️", count: 2, reactedByMe: false, users: ["sarahkim", "mikejones"] },
         "🔥": { emoji: "🔥", count: 1, reactedByMe: true, users: ["You"] },
       },
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
     },
     {
       id: "msg1-4",

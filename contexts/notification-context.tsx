@@ -26,8 +26,16 @@ const generateMockNotifications = (): Notification[] => {
       content: "liked your post",
       time: "5m ago",
       read: false,
+<<<<<<< HEAD
       actionLabel: "View Post",
       actionUrl: "/post/1",
+=======
+<<<<<<< HEAD
+      actionLabel: "View Post",
+      actionUrl: "/post/1",
+=======
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
     },
     {
       id: "2",
@@ -37,8 +45,16 @@ const generateMockNotifications = (): Notification[] => {
       content: "commented on your post: 'Great idea!'",
       time: "1h ago",
       read: false,
+<<<<<<< HEAD
       actionLabel: "Reply",
       actionUrl: "/post/1",
+=======
+<<<<<<< HEAD
+      actionLabel: "Reply",
+      actionUrl: "/post/1",
+=======
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
     },
     {
       id: "3",
@@ -48,6 +64,10 @@ const generateMockNotifications = (): Notification[] => {
       content: "started following you",
       time: "3h ago",
       read: true,
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
       actionLabel: "Follow Back",
       actionUrl: "/user/pi_enthusiast",
     },
@@ -61,6 +81,11 @@ const generateMockNotifications = (): Notification[] => {
       read: false,
       actionLabel: "View",
       actionUrl: "/post/2",
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
     },
   ]
 }

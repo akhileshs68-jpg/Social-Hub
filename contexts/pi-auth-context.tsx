@@ -3,7 +3,10 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
 import { PI_NETWORK_CONFIG, BACKEND_URLS } from "@/lib/system-config"
 import { api, setApiAuthToken } from "@/lib/api"
+<<<<<<< HEAD
 import { saveUserProfile } from "@/lib/firebase-social-service"
+=======
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
 import type { User } from "@/lib/types"
 
 export type LoginDTO = {
@@ -49,8 +52,11 @@ interface PiAuthContextType {
   piAccessToken: string | null
   userData: LoginDTO | null
   userProfile: User | null
+<<<<<<< HEAD
   user: User | null
   updateUserProfile: (updates: Partial<User>) => Promise<void>
+=======
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
   logout: () => void
   reinitialize: () => Promise<void>
 }
@@ -64,6 +70,7 @@ const SESSION_KEYS = {
   LOGIN_TIMESTAMP: "pi_login_timestamp",
 }
 
+<<<<<<< HEAD
 type BackendLoginResponse = Partial<LoginDTO> & {
   token?: string
   accessToken?: string
@@ -95,6 +102,8 @@ const normalizeLoginData = (response: BackendLoginResponse, piAuthResult: PiAuth
   }
 }
 
+=======
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
 const loadPiSDK = (): Promise<void> => {
   return new Promise((resolve, reject) => {
     const script = document.createElement("script")
@@ -105,10 +114,18 @@ const loadPiSDK = (): Promise<void> => {
     script.async = true
 
     script.onload = () => {
+<<<<<<< HEAD
+=======
+      console.log("✅ Pi SDK script loaded successfully")
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
       resolve()
     }
 
     script.onerror = () => {
+<<<<<<< HEAD
+=======
+      console.error("❌ Failed to load Pi SDK script")
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
       reject(new Error("Failed to load Pi SDK script"))
     }
 
@@ -117,6 +134,10 @@ const loadPiSDK = (): Promise<void> => {
 }
 
 export function PiAuthProvider({ children }: { children: ReactNode }) {
+<<<<<<< HEAD
+=======
+  return <>{children}</>
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [authMessage, setAuthMessage] = useState("Initializing Pi Network...")
   const [piAccessToken, setPiAccessToken] = useState<string | null>(null)
@@ -145,10 +166,15 @@ export function PiAuthProvider({ children }: { children: ReactNode }) {
     const profile: User = {
       id: loginData.id,
       username: piAuthResult.user.username,
+<<<<<<< HEAD
       displayName: piAuthResult.user.username,
       piUid: piAuthResult.user.uid,
       avatar: piAuthResult.user.username[0]?.toUpperCase() || "P",
       photoURL: "",
+=======
+      piUid: piAuthResult.user.uid,
+      avatar: piAuthResult.user.username[0]?.toUpperCase() || "P",
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
       bio: `Pi Network Pioneer | Joined ${new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" })}`,
       followers: 0,
       following: 0,
@@ -160,14 +186,18 @@ export function PiAuthProvider({ children }: { children: ReactNode }) {
 
     sessionStorage.setItem(SESSION_KEYS.USER_PROFILE, JSON.stringify(profile))
     setUserProfile(profile)
+<<<<<<< HEAD
     saveUserProfile(profile).catch((error) => {
       console.error("[socialhub] Failed to save user profile:", error)
     })
+=======
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
 
     return profile
   }
 
   const authenticateAndLogin = async (): Promise<void> => {
+<<<<<<< HEAD
     setAuthMessage("Authenticating with Pi Network...")
     const piAuthResult =
       typeof window.Pi !== "undefined" ? await window.Pi.authenticate(["username", "payments"]) : createDemoAuthResult()
@@ -216,12 +246,70 @@ export function PiAuthProvider({ children }: { children: ReactNode }) {
 
     setAuthMessage("Creating user profile...")
     createUserProfile(piAuthResult, loginData)
+=======
+<<<<<<< HEAD
+    const isLocalhost =
+  typeof window !== "undefined" &&
+  window.location.hostname === "localhost"
+
+if (isLocalhost) {
+  const mockUser = {
+    id: "demo-user",
+    username: "demo_user",
+    piUid: "demo_pi_uid",
+    avatar: "D",
+    bio: "Demo Local User",
+    followers: 0,
+    following: 0,
+    joinedDate: new Date().toISOString(),
+    loginTimestamp: new Date().toISOString(),
+    location: "Localhost",
+    website: "localhost"
+  }
+
+  setUserProfile(mockUser)
+  setAuthMessage("Local development mode")
+  setIsAuthenticated(true)
+ 
+
+  return
+}
+=======
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
+    setAuthMessage("Authenticating with Pi Network...")
+    const piAuthResult = await window.Pi.authenticate(["username", "payments"])
+
+    console.log("[v0] Pi authentication successful:", {
+      uid: piAuthResult.user.uid,
+      username: piAuthResult.user.username,
+    })
+
+    setAuthMessage("Logging in to backend...")
+    const loginRes = await api.post<LoginDTO>(BACKEND_URLS.LOGIN, {
+      pi_auth_token: piAuthResult.accessToken,
+    })
+
+    console.log("[v0] Backend login successful:", loginRes.data)
+
+    if (piAuthResult?.accessToken) {
+      setPiAccessToken(piAuthResult.accessToken)
+      setApiAuthToken(piAuthResult.accessToken)
+      sessionStorage.setItem(SESSION_KEYS.ACCESS_TOKEN, piAuthResult.accessToken)
+    }
+
+    setUserData(loginRes.data)
+    sessionStorage.setItem(SESSION_KEYS.USER_DATA, JSON.stringify(loginRes.data))
+
+    setAuthMessage("Creating user profile...")
+    createUserProfile(piAuthResult, loginRes.data)
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
   }
 
   const initializePiAndAuthenticate = async () => {
     try {
       setAuthMessage("Loading Pi Network SDK...")
 
+<<<<<<< HEAD
       if (typeof window.Pi === "undefined" && !DEMO_AUTH_ENABLED) {
         await loadPiSDK()
       }
@@ -239,17 +327,42 @@ export function PiAuthProvider({ children }: { children: ReactNode }) {
           sandbox: PI_NETWORK_CONFIG.SANDBOX,
         })
       }
+=======
+      // Only load if not already loaded
+      if (typeof window.Pi === "undefined") {
+        await loadPiSDK()
+      }
+
+      if (typeof window.Pi === "undefined") {
+        throw new Error("Pi object not available after script load")
+      }
+
+      setAuthMessage("Initializing Pi Network...")
+      await window.Pi.init({
+        version: "2.0",
+        sandbox: PI_NETWORK_CONFIG.SANDBOX,
+      })
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
 
       await authenticateAndLogin()
 
       setIsAuthenticated(true)
       setAuthMessage("Authentication complete")
     } catch (err) {
+<<<<<<< HEAD
+=======
+      console.error("❌ Pi Network initialization failed:", err)
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
       setAuthMessage("Failed to authenticate or login. Please refresh and try again.")
     }
   }
 
   const logout = () => {
+<<<<<<< HEAD
+=======
+    console.log("[v0] Logging out user")
+
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
     // Clear all session data
     sessionStorage.removeItem(SESSION_KEYS.ACCESS_TOKEN)
     sessionStorage.removeItem(SESSION_KEYS.USER_DATA)
@@ -270,6 +383,7 @@ export function PiAuthProvider({ children }: { children: ReactNode }) {
     }, 500)
   }
 
+<<<<<<< HEAD
   const updateUserProfile = async (updates: Partial<User>) => {
     let nextProfile: User | null = null
 
@@ -286,6 +400,8 @@ export function PiAuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
+=======
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
   useEffect(() => {
     // Only initialize if no session exists
     if (!sessionStorage.getItem(SESSION_KEYS.ACCESS_TOKEN)) {
@@ -299,8 +415,11 @@ export function PiAuthProvider({ children }: { children: ReactNode }) {
     piAccessToken,
     userData,
     userProfile,
+<<<<<<< HEAD
     user: userProfile,
     updateUserProfile,
+=======
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
     logout,
     reinitialize: initializePiAndAuthenticate,
   }

@@ -7,10 +7,13 @@ export interface AICaption {
   sentiment: "positive" | "neutral" | "negative"
 }
 
+<<<<<<< HEAD
 interface AICaptionHistoryItem extends AICaption {
   createdAt: string
 }
 
+=======
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
 export interface AutoReplyTemplate {
   id: string
   name: string
@@ -59,11 +62,22 @@ class AIService {
   generateCaption(contentDescription: string, contentType: "image" | "video" = "image"): AICaption {
     // Simulate AI caption generation
     const captions: Record<string, AICaption> = {
+<<<<<<< HEAD
       selfie: {
         caption: "Feeling good and ready to take on the day! Life is precious, enjoy every moment.",
         hashtags: ["#selflove", "#motivation", "#dayvibes", "#positivity"],
         sentiment: "positive",
       },
+=======
+      selfie:
+        {
+          caption:
+            "Feeling good and ready to take on the day! Life is precious, enjoy every moment.",
+          hashtags: ["#selflove", "#motivation", "#dayvibes", "#positivity"],
+          sentiment: "positive",
+        } ||
+        selfie,
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
       nature: {
         caption: "Nature's beauty never gets old. Taking time to appreciate the simple things.",
         hashtags: ["#nature", "#outdoors", "#beautiful", "#peace"],
@@ -216,7 +230,11 @@ class AIService {
   /**
    * Get caption generation history
    */
+<<<<<<< HEAD
   getCaptionHistory(): AICaptionHistoryItem[] {
+=======
+  getCaptionHistory(): AICaption[] {
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
     try {
       return JSON.parse(localStorage.getItem(this.SK.CAPTION_HISTORY) || "[]")
     } catch {
@@ -227,7 +245,11 @@ class AIService {
   private saveCaptionHistory(caption: AICaption): void {
     try {
       const history = this.getCaptionHistory()
+<<<<<<< HEAD
       history.unshift({ ...caption, createdAt: new Date().toISOString() })
+=======
+      history.unshift({ ...caption, createdAt: new Date().toISOString() } as any)
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
       history.splice(50) // Keep only last 50
       localStorage.setItem(this.SK.CAPTION_HISTORY, JSON.stringify(history))
     } catch {

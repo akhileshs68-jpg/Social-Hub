@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { getApp, getApps, initializeApp, type FirebaseApp, type FirebaseOptions } from "firebase/app"
 import { getAuth } from "firebase/auth"
 import { getDatabase } from "firebase/database"
@@ -59,3 +60,23 @@ export const db = app ? getFirestore(app) : null
 export const getFirebaseDb = () => getFirestore(assertFirebaseApp())
 
 export default app
+=======
+import { initializeApp } from "firebase/app"
+import { getDatabase } from "firebase/database"
+import { getAuth } from "firebase/auth"
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCprFNfDxEuQMKyxCvxTK0kAi17JA-f9RM",
+  authDomain: "pi-social-hub.firebaseapp.com",
+  databaseURL: "https://pi-social-hub-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "pi-social-hub",
+  storageBucket: "pi-social-hub.firebasestorage.app",
+  messagingSenderId: "30791275310",
+  appId: "1:30791275310:web:6a47ce1dca582d725ce0bf",
+}
+
+const app = initializeApp(firebaseConfig)
+
+export const database = getDatabase(app)
+export const auth = getAuth(app)
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046

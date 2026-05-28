@@ -1,6 +1,7 @@
 // Engagement service for leaderboard, badges, streaks, and achievements
 import type { Badge, UserAchievement, Streak } from "@/lib/types"
 
+<<<<<<< HEAD
 interface StoredAchievement extends UserAchievement {
   userId: string
   badgeId: string
@@ -23,6 +24,8 @@ interface DailyPointsEntry {
   }[]
 }
 
+=======
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
 export interface LeaderboardEntry {
   rank: number
   username: string
@@ -183,9 +186,13 @@ class EngagementService {
       return null // Already unlocked
     }
 
+<<<<<<< HEAD
     const achievement: StoredAchievement = {
       id: `${userId}-${badgeId}`,
       type: "milestone",
+=======
+    const achievement: UserAchievement & { userId: string; badgeId: string } = {
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
       userId,
       badgeId,
       title: badge.name,
@@ -213,8 +220,13 @@ class EngagementService {
   getUserBadges(userId: string): Badge[] {
     const achievements = this.getAchievements()
     return achievements
+<<<<<<< HEAD
       .filter((a) => a.userId === userId)
       .map((a) => a.badgeId)
+=======
+      .filter((a) => (a as any).userId === userId)
+      .map((a) => (a as any).badgeId)
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
       .map((id) => this.BADGE_DEFINITIONS[id])
       .filter(Boolean)
   }
@@ -231,7 +243,11 @@ class EngagementService {
       const userScores: Record<string, LeaderboardEntry> = {}
 
       // Calculate points
+<<<<<<< HEAD
       Object.entries(dailyPoints as Record<string, DailyPointsEntry>).forEach(([key, value]) => {
+=======
+      Object.entries(dailyPoints).forEach(([key, value]: any) => {
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
         const [userId] = key.split("_")
         if (!userScores[userId]) {
           userScores[userId] = {
@@ -247,14 +263,22 @@ class EngagementService {
       })
 
       // Add streaks and achievements
+<<<<<<< HEAD
       streaks.forEach((streak) => {
+=======
+      streaks.forEach((streak: any) => {
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
         if (userScores[streak.userId]) {
           userScores[streak.userId].streak = streak.currentStreak
         }
       })
 
       Object.entries(userScores).forEach(([userId]) => {
+<<<<<<< HEAD
         userScores[userId].achievements = achievements.filter((a) => a.userId === userId).length
+=======
+        userScores[userId].achievements = achievements.filter((a) => (a as any).userId === userId).length
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
       })
 
       // Sort and rank
@@ -278,7 +302,11 @@ class EngagementService {
     return entry?.rank || 0
   }
 
+<<<<<<< HEAD
   private getStreaks(): StoredStreak[] {
+=======
+  private getStreaks(): any[] {
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
     try {
       return JSON.parse(localStorage.getItem(this.SK.STREAKS) || "[]")
     } catch {
@@ -286,7 +314,11 @@ class EngagementService {
     }
   }
 
+<<<<<<< HEAD
   private saveStreaks(allStreaks: StoredStreak[], updated: StoredStreak): void {
+=======
+  private saveStreaks(allStreaks: any[], updated: any): void {
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
     try {
       const index = allStreaks.findIndex((s) => s.userId === updated.userId)
       if (index >= 0) {
@@ -300,7 +332,11 @@ class EngagementService {
     }
   }
 
+<<<<<<< HEAD
   private getAchievements(): StoredAchievement[] {
+=======
+  private getAchievements(): any[] {
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
     try {
       return JSON.parse(localStorage.getItem(this.SK.ACHIEVEMENTS) || "[]")
     } catch {

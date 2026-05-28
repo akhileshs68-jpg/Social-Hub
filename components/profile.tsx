@@ -1,5 +1,6 @@
 "use client"
 
+<<<<<<< HEAD
 import { useState } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -8,14 +9,35 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+=======
+<<<<<<< HEAD
+import { useState } from "react"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
 import { Settings, MapPin, Calendar, LinkIcon, LogOut, Coins, CheckCircle2, Crown } from "lucide-react"
 import { PostCard } from "@/components/post-card"
 import type { Post } from "@/lib/types"
 import { usePiAuth } from "@/contexts/pi-auth-context"
 import { useSHUBToken } from "@/contexts/shub-token-context"
+<<<<<<< HEAD
 import { useToast } from "@/hooks/use-toast"
 import { uploadToCloudinary } from "@/lib/cloudinary"
 import { validateImageFile } from "@/lib/media-utils"
+=======
+=======
+import { useState, useEffect } from "react"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Settings, MapPin, Calendar, LinkIcon, LogOut, Crown } from "lucide-react"
+import { PostCard } from "@/components/post-card"
+import type { Post } from "@/lib/types"
+import { usePiAuth } from "@/contexts/pi-auth-context"
+import { piPaymentService } from "@/lib/pi-payment-service"
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
 
 interface ProfileProps {
   username: string
@@ -37,6 +59,7 @@ const USER_POSTS: Post[] = [
 ]
 
 export function Profile({ username, userId }: ProfileProps) {
+<<<<<<< HEAD
   const { userProfile, updateUserProfile, logout } = usePiAuth()
   const { tokens, isReady: tokensReady } = useSHUBToken()
   const { toast } = useToast()
@@ -50,6 +73,24 @@ export function Profile({ username, userId }: ProfileProps) {
   const [profilePhotoFile, setProfilePhotoFile] = useState<File | null>(null)
   const [profilePhotoPreview, setProfilePhotoPreview] = useState("")
   const [savingProfile, setSavingProfile] = useState(false)
+=======
+  const { userProfile, logout } = usePiAuth()
+<<<<<<< HEAD
+  const { tokens, isReady: tokensReady } = useSHUBToken()
+=======
+  const [isPremium, setIsPremium] = useState(false)
+
+  useEffect(() => {
+    const checkPremiumStatus = async () => {
+      if (userProfile?.id) {
+        const subscription = await piPaymentService.getUserSubscription(userProfile.id)
+        setIsPremium(piPaymentService.isPremiumActive(subscription))
+      }
+    }
+    checkPremiumStatus()
+  }, [userProfile])
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
 
   const displayUsername = userProfile?.username || username
   const displayBio =
@@ -62,6 +103,7 @@ export function Profile({ username, userId }: ProfileProps) {
     ? new Date(userProfile.joinedDate).toLocaleDateString("en-US", { month: "long", year: "numeric" })
     : "January 2024"
 
+<<<<<<< HEAD
   const openSettings = () => {
     setProfileForm({
       displayName: userProfile?.displayName || displayUsername,
@@ -134,6 +176,8 @@ export function Profile({ username, userId }: ProfileProps) {
     }
   }
 
+=======
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
   return (
     <div>
       <div className="relative">
@@ -142,7 +186,10 @@ export function Profile({ username, userId }: ProfileProps) {
         <div className="px-4 pb-4">
           <div className="flex items-end justify-between -mt-12 gap-3">
             <Avatar className="w-24 h-24 border-4 border-background shrink-0">
+<<<<<<< HEAD
               {userProfile?.photoURL && <AvatarImage src={userProfile.photoURL} alt={displayUsername} />}
+=======
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
               <AvatarFallback className="bg-primary text-primary-foreground text-2xl">
                 {displayUsername[0]?.toUpperCase() || "P"}
               </AvatarFallback>
@@ -159,12 +206,16 @@ export function Profile({ username, userId }: ProfileProps) {
                 <LogOut className="w-4 h-4 sm:mr-2" />
                 <span className="hidden sm:inline">Logout</span>
               </Button>
+<<<<<<< HEAD
               <Button
                 size="sm"
                 variant="outline"
                 className="shrink-0 touch-manipulation bg-transparent"
                 onClick={openSettings}
               >
+=======
+              <Button size="sm" variant="outline" className="shrink-0 touch-manipulation bg-transparent">
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
                 <Settings className="w-4 h-4 sm:mr-2" />
                 <span className="hidden sm:inline">Edit</span>
               </Button>
@@ -172,11 +223,19 @@ export function Profile({ username, userId }: ProfileProps) {
           </div>
 
           <div className="mt-3">
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
             <div className="flex items-center gap-2 flex-wrap">
               <h2 className="text-xl font-bold flex items-center gap-1">
                 {displayUsername}
                 {userProfile?.isVerified && (
+<<<<<<< HEAD
                   <CheckCircle2 className="w-5 h-5 text-blue-500 fill-blue-500" aria-label="Verified account" />
+=======
+                  <CheckCircle2 className="w-5 h-5 text-blue-500 fill-blue-500" title="Verified account" />
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
                 )}
               </h2>
               {userProfile?.isPremium && (
@@ -191,6 +250,19 @@ export function Profile({ username, userId }: ProfileProps) {
                   {tokens.toFixed(3)} SHUB
                 </Badge>
               )}
+<<<<<<< HEAD
+=======
+=======
+            <div className="flex items-center gap-2">
+              <h2 className="text-xl font-bold">{displayUsername}</h2>
+              {isPremium && (
+                <Badge className="bg-gradient-to-r from-yellow-500 to-amber-600 text-white border-0">
+                  <Crown className="w-3 h-3 mr-1" />
+                  Premium
+                </Badge>
+              )}
+>>>>>>> 82bc3ca8b44839ba49ec0fc525fcb6c408caf7eb
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
             </div>
             <p className="text-sm text-muted-foreground">@{displayUsername}</p>
             {userProfile?.piUid && (
@@ -247,6 +319,7 @@ export function Profile({ username, userId }: ProfileProps) {
           ))}
         </div>
       </div>
+<<<<<<< HEAD
 
       <Dialog open={settingsOpen} onOpenChange={setSettingsOpen}>
         <DialogContent>
@@ -319,6 +392,8 @@ export function Profile({ username, userId }: ProfileProps) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+=======
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
     </div>
   )
 }

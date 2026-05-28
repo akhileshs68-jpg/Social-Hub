@@ -37,7 +37,11 @@ const defaultHeaders: Record<string, string> = {
   "Content-Type": "application/json",
 };
 
+<<<<<<< HEAD
 const request = async <T = unknown>(
+=======
+const request = async <T = any>(
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
   url: string,
   init: RequestInit = {}
 ): Promise<FetchResponse<T>> => {
@@ -76,6 +80,7 @@ const request = async <T = unknown>(
 };
 
 export const api = {
+<<<<<<< HEAD
   get: <T = unknown>(url: string, init?: RequestInit) =>
     request<T>(url, { ...init, method: "GET" }),
 
@@ -83,20 +88,37 @@ export const api = {
     request<T>(url, { ...init, method: "DELETE" }),
 
   post: <T = unknown>(url: string, body?: unknown, init?: RequestInit) =>
+=======
+  get: <T = any>(url: string, init?: RequestInit) =>
+    request<T>(url, { ...init, method: "GET" }),
+
+  delete: <T = any>(url: string, init?: RequestInit) =>
+    request<T>(url, { ...init, method: "DELETE" }),
+
+  post: <T = any>(url: string, body?: any, init?: RequestInit) =>
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
     request<T>(url, {
       ...init,
       method: "POST",
       body: body === undefined ? init?.body : JSON.stringify(body),
     }),
 
+<<<<<<< HEAD
   put: <T = unknown>(url: string, body?: unknown, init?: RequestInit) =>
+=======
+  put: <T = any>(url: string, body?: any, init?: RequestInit) =>
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
     request<T>(url, {
       ...init,
       method: "PUT",
       body: body === undefined ? init?.body : JSON.stringify(body),
     }),
 
+<<<<<<< HEAD
   patch: <T = unknown>(url: string, body?: unknown, init?: RequestInit) =>
+=======
+  patch: <T = any>(url: string, body?: any, init?: RequestInit) =>
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
     request<T>(url, {
       ...init,
       method: "PATCH",

@@ -5,6 +5,7 @@ export interface CacheEntry<T> {
   expiresIn?: number
 }
 
+<<<<<<< HEAD
 interface NavigatorWithDeviceMemory extends Navigator {
   deviceMemory?: number
 }
@@ -23,6 +24,8 @@ interface LayoutShiftPerformanceEntry extends PerformanceEntry {
   value?: number
 }
 
+=======
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
 class PerformanceService {
   private readonly SK = {
     CACHE: "perf_cache",
@@ -168,7 +171,11 @@ class PerformanceService {
       let cleaned = false
 
       Object.keys(cache).forEach((key) => {
+<<<<<<< HEAD
         const entry = cache[key] as CacheEntry<unknown>
+=======
+        const entry = cache[key] as CacheEntry<any>
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
         if (entry.expiresIn && now - entry.timestamp > entry.expiresIn) {
           delete cache[key]
           cleaned = true
@@ -190,7 +197,11 @@ class PerformanceService {
     if (typeof window === "undefined") return
 
     // Check available memory
+<<<<<<< HEAD
     const memory = (navigator as NavigatorWithDeviceMemory).deviceMemory
+=======
+    const memory = (navigator as any).deviceMemory
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
     if (memory && memory <= 2) {
       // Reduce animations, disable transitions
       document.documentElement.style.setProperty("--transition-speed", "0s")
@@ -247,7 +258,11 @@ class PerformanceService {
       // Largest Contentful Paint
       const lcpObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries()
+<<<<<<< HEAD
         const lastEntry = entries[entries.length - 1] as LargestContentfulPaintEntry
+=======
+        const lastEntry = entries[entries.length - 1]
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
         console.log("[v0] LCP:", lastEntry.renderTime || lastEntry.loadTime)
       })
       lcpObserver.observe({ entryTypes: ["largest-contentful-paint"] })
@@ -255,7 +270,11 @@ class PerformanceService {
       // First Input Delay
       const fidObserver = new PerformanceObserver((list) => {
         list.getEntries().forEach((entry) => {
+<<<<<<< HEAD
           console.log("[v0] FID:", (entry as FirstInputPerformanceEntry).processingDuration)
+=======
+          console.log("[v0] FID:", (entry as any).processingDuration)
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
         })
       })
       fidObserver.observe({ entryTypes: ["first-input"] })
@@ -264,9 +283,14 @@ class PerformanceService {
       let cls = 0
       const clsObserver = new PerformanceObserver((list) => {
         list.getEntries().forEach((entry) => {
+<<<<<<< HEAD
           const layoutEntry = entry as LayoutShiftPerformanceEntry
           if (!layoutEntry.hadRecentInput) {
             cls += layoutEntry.value || 0
+=======
+          if (!(entry as any).hadRecentInput) {
+            cls += (entry as any).value
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
             console.log("[v0] CLS:", cls)
           }
         })
@@ -277,7 +301,11 @@ class PerformanceService {
     }
   }
 
+<<<<<<< HEAD
   private getCache(): Record<string, CacheEntry<unknown>> {
+=======
+  private getCache(): Record<string, CacheEntry<any>> {
+>>>>>>> c07617a5128ffd992b542a41c1dea574864a3046
     try {
       return JSON.parse(localStorage.getItem(this.SK.CACHE) || "{}")
     } catch {
